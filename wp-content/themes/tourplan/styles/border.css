@@ -1,0 +1,46 @@
+/* Borders */
+
+/* All borders */
+.border-white{
+    border: 1px solid #fff;
+}
+
+.border-gray{
+    border: 1px solid #ddd;
+}
+
+.border-gray-dark{
+    border: 1px solid #aaa;
+}
+
+.border-black{
+    border: 1px solid #343434;
+}
+
+.border-blue{
+    border: 1px solid #00A8EF;
+}
+
+.border-green{
+    border: 1px solid #3c763d;
+}
+
+.border-hay{
+    border: 1px solid #9d937c !important;
+}
+
+.border-notop{
+    border-top: 0;
+}
+
+.border-nobottom{
+    border-bottom: 0;
+}
+
+.border-noleft{
+    border-left: 0;
+}
+
+.border-noright{
+    border-right: 0;
+}

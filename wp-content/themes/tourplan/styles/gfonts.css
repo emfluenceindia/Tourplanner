@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css?family=Cabin+Condensed|Lato|Open+Sans|Roboto|Roboto+Condensed');
+@import url('https://fonts.googleapis.com/css?family=Baloo+Chettan|Fredoka+One|Kaushan+Script|Permanent+Marker|Righteous|Satisfy');
+@import url('https://fonts.googleapis.com/css?family=Acme|Cedarville+Cursive|Courgette|Hammersmith+One|Sacramento|Satisfy|Tangerine');
+/*
+font-family: 'Roboto', sans-serif;
+font-family: 'Roboto Condensed', sans-serif;
+font-family: 'Open Sans', sans-serif;
+font-family: 'Lato', sans-serif;
+font-family: 'Cabin Condensed', sans-serif;
+
+font-family: 'Baloo Chettan', cursive;
+font-family: 'Righteous', cursive;
+font-family: 'Satisfy', cursive;
+font-family: 'Kaushan Script', cursive;
+font-family: 'Permanent Marker', cursive;
+font-family: 'Fredoka One', cursive;
+
+font-family: 'Acme', sans-serif;
+font-family: 'Courgette', cursive;
+font-family: 'Hammersmith One', sans-serif;
+font-family: 'Tangerine', cursive;
+font-family: 'Cedarville Cursive', cursive;
+font-family: 'Sacramento', cursive;
+*/
+
+.acme{
+    font-family: 'Acme', sans-serif !important;
+}
+
+.courgette{
+    font-family: 'Courgette', cursive !important;
+}
+
+.tangerine{
+    font-family: 'Tangerine', cursive !important;
+}
+
+.cedarville{
+    font-family: 'Cedarville Cursive', cursive !important;
+}
+
+.sacramento{
+    font-family: 'Sacramento', cursive !important;
+}
+
+.satisfy{
+    font-family: 'Satisfy', cursive !important;
+}
+
+.roboto{
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.roboto-c{
+    font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+.open-sans{
+    font-family: 'Open Sans', sans-serif !important;
+}
+
+.lato{
+    font-family: 'Lato', sans-serif !important;
+}
+
+.cabin-c{
+    font-family: 'Cabin Condensed', sans-serif !important;
+}
+
+.baloo{
+    font-family: 'Baloo Chettan', cursive !important;
+}
+
+.righteous{
+    font-family: 'Righteous', cursive !important;
+}
+
+.kaushan{
+    font-family: 'Kaushan Script', cursive !important;
+}
+
+.marker{
+    font-family: 'Permanent Marker', cursive !important;
+}
+
+.fredoka{
+    font-family: 'Fredoka One', cursive !important;
+}

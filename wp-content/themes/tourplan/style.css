@@ -1,0 +1,593 @@
+/*
+Theme Name: Tourplan
+Author: Subrata Sarkar
+Description: Tour planner
+Version: 1.0
+*/
+
+body{
+    background: #efefef !important;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 16px !important;
+    color: #343434;
+    padding: 0;
+}
+
+h1, h2, h3, h4{
+    margin: 0 auto !important;
+    font-family: 'Lato', sans-serif !important;
+}
+
+hr{
+    display: block;
+    height: 0 !important;
+    border: 0;
+    border-top: 1px solid #ddd !important;
+    border-bottom: 1px solid #fefefe !important;
+    margin: 1em 0 !important;
+    padding: 0;
+}
+
+hr.footer-hr{
+    display: block;
+    height: 0 !important;
+    border: 0;
+    border-top: 1px solid #8d836a !important;
+    border-bottom: 1px solid #aca38f !important;
+    margin: 1em 0 !important;
+    padding: 0;
+}
+
+hr.hr-white-base{
+    display: block;
+    height: 0 !important;
+    border: 0;
+    border-top: 1px solid #d5d5d5 !important;
+    border-bottom: 1px solid #ffffff !important;
+    margin: 1em 0 !important;
+    padding: 0;
+}
+
+p{
+    line-height: 1.2em;
+
+}
+
+a, a:hover{
+    text-decoration: none !important;
+}
+
+
+img{
+    width: 100%;
+    height: auto;
+}
+
+.site_name a{
+    font-size: 1.3em;
+}
+
+.cat-links a{
+    font-size: .8em;
+}
+
+.grid-featured-image-container{
+    height:160px;
+}
+
+.grid-featured-image-container a img{
+    height: 100%;
+}
+
+.grid-title{
+    height: 55px;
+}
+
+.grid-excerpt, .grid-excerpt p{
+    font-size: .8em;
+    color: #999999;
+    margin: 6px 0 10px 0;
+}
+
+ul, ul.related-posts{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul li a, ul.related-posts li a{
+    font-size: .8em;
+    display: block;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+
+p.bodyText{
+    line-height: 1.5em;
+}
+
+.module-head{
+    color: #5F8E14;
+}
+
+.li-container ul, .li-container ul li{
+    font-size: 1em !important;
+}
+
+.li-container ul li{
+    display: block;
+    margin-top: 10px;
+    border-bottom: 1px dotted #9d937c;
+    padding-bottom: 6px;
+}
+
+.li-container ul li strong{
+    color:#9d937c;
+    font-family: 'Hammersmith One', sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.itinerary ul li{
+    font-size: .85em !important;
+}
+
+.image-container img {
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: #fff;
+}
+
+/*
+ * Row with equal height columns
+ * --------------------------------------------------
+ */
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+}
+
+/* post-ratings */
+#post-ratings-31 img, .post-ratings img{
+    display: inline-block !important;
+    width: 16px !important;
+    height: 16px; !important;
+    margin-right:2px;
+    position: relative;
+    bottom: 2px;
+}
+
+.post-ratings, #post-ratings-31, .post-ratings strong, #post-ratings-31 strong {
+    font-size: 12px !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Pagination class */
+a.page-numbers{
+    padding: 2px 8px;
+    background: #1d75b3;
+    color: #ffffff;
+}
+
+a.page-numbers:hover{
+    background: #00a8c6;
+    color: #ffffff;
+}
+
+span.page-numbers.current, a.page-numbers:active{
+    padding: 1px 6px;
+    background: #ffffff;
+    color: #656565;
+    border: 1px solid #656565;
+}
+
+a.page-numbers,
+span.page-numbers.current{
+    display: inline-block;
+    text-align: center;
+    font-family:'Raboto', sans-serif;
+    font-size: .85em;
+}
+
+/* Google map */
+.acf-map {
+    width: 100%;
+    height: 250px;
+    border: #ccc solid 1px;
+    margin: 20px 0;
+}
+
+/* fixes potential theme css conflict */
+.acf-map img {
+    max-width: inherit !important;
+}
+
+/* navbar */
+
+.navbar-default {
+    background: #5F8E14 !important;
+    border-radius: 0 0 0 0 !important;
+    -webkit-border-radius: 0 0 0 0 !important;
+    -mozilla-border-radius: 0 0 0 0 !important;
+    width: 100% !important;
+    margin-top: 10px;
+    border: none !important;
+}
+
+.navbar-default ul.navbar-nav li a {
+    color: #ffffff;
+    text-decoration: none !important;
+    border: 0 !important;
+}
+
+/* Package Tour info container */
+
+.package-tour-info-container ul li {
+    display: block;
+    margin-top: 2px;
+}
+
+.package-tour-info-container b {
+    color:#9d937c;
+    text-transform: uppercase;
+}
+
+.package-tour-list p{
+    font-size: .85em;
+}
+
+.site-footer{
+    background: #9d937c;
+}
+
+.footer-container{
+    color: #5f4f3f;
+}
+
+.footer-container a{
+    color: #dddddd;
+}
+
+.footer-container a:hover{
+    color: #ffffff;
+}
+
+.entry-content p{
+    font-size: .9em;
+    color: #656565;
+}
+
+.entry-content p strong{
+    font-size: 1.2em;
+    color:#9d937c;
+    font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+/* Forum */
+.forum-topic-row a{
+    border: 0;
+    display: inline-block;
+}
+
+/* Login form */
+
+form#loginform .recovery-action,
+form#loginform .recovery-action a {
+    font-size: .9em;
+}
+
+form#loginform p.login-remember label input, .fix-chkbx-alignment  {
+    position: relative;
+    top: 2px;
+}
+
+form#loginform input[type='submit'],
+.bbp-login-form input[type='submit'],
+.bbp-login-form button[type='submit']{
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+form#loginform input[type='submit'],
+.bbp-login-form input[type='submit'],
+.bbp-login-form button[type='submit'] {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+    font-size: .8em;
+}
+form#loginform input[type='submit']:hover,
+form#loginform input[type='submit']:focus,
+form#loginform input[type='submit']:active,
+form#loginform input[type='submit'].active,
+.bbp-login-form input[type='submit']:hover,
+.bbp-login-form input[type='submit']:focus,
+.bbp-login-form input[type='submit']:active,
+.bbp-login-form input[type='submit'].active,
+.open .dropdown-toggle.bbp-login-form input[type='submit'],
+.bbp-login-form button[type='submit']:hover,
+.bbp-login-form button[type='submit']:focus,
+.bbp-login-form button[type='submit']:active,
+.bbp-login-form button[type='submit'].active,
+.open .dropdown-toggle.bbp-login-form button[type='submit'] {
+    color: #fff;
+    background-color: #3276b1;
+    border-color: #285e8e;
+}
+
+.form-topic-dropdowm textarea {
+    height: auto;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -mozilla-border-bottom-left-radius: 10px;
+    -mozilla-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    border: 1px solid #ccc;
+    border-top: 0;
+    min-width: 100%
+}
+
+.bbp-login-form input[type='text'],
+.bbp-login-form input[type='password'],
+form#loginform input[type='text'],
+form#loginform input[type='password'],
+.form-topic-dropdowm select {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    margin-top: -5px;
+}
+
+.bbp-login-form input[type='text']:focus,
+.bbp-login-form input[type='password']:focus,
+.form-topic-dropdowm select:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+.bbp-login-form input[type='text']::-moz-placeholder,
+.bbp-login-form input[type='password']::-moz-placeholder {
+    color: #999;
+    opacity: 1;
+}
+.bbp-login-form input[type='text']:-ms-input-placeholder,
+.bbp-login-form input[type='password']:-ms-input-placeholder {
+    color: #999;
+}
+.bbp-login-form input[type='text']::-webkit-input-placeholder,
+.bbp-login-form input[type='password']::-webkit-input-placeholder {
+    color: #999;
+}
+
+.bbp-login-form div label,
+form#loginform label {
+    font-size: .85em;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.bbp-login-form fieldset legend,
+.bbp_widget_login h2.widgettitle {
+    font-family: 'Roboto Condensed', sans-serif !important;
+    color: #5F8E14 !important;
+    font-size: 1.3em;
+    margin: 0 auto !important;
+}
+
+li.bbp_widget_login{
+    list-style-type: none;
+}
+
+a.bbp-register-link,
+a.bbp-lostpass-link {
+    font-size: .85em;
+}
+
+.bbp-logged-in a img.avatar{
+    max-width: 30% !important;
+    float:left;
+}
+
+.bbp-logged-in h4 a,
+.bbp-logged-in a {
+    font-size: .85em;
+}
+
+/* user action links */
+.user-action-links li a {
+    font-size: 1em;
+}
+
+/* WYSIWYG links content wrapper */
+.form-topic-dropdowm .bbp-the-content-wrapper .wp-editor-wrap .wp-editor-container .quicktags-toolbar {
+    background: none !important;
+    background: #ddd !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -mozilla-border-top-left-radius: 5px;
+    -mozilla-border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    border: 1px solid #ccc;
+    border-bottom: 0;
+}
+
+.form-topic-control-container, .form-topic-control-container label {
+    font-size: .9em;
+    line-height: 1.6em;
+    font-weight: normal;
+}
+
+.inline-link{
+    display: inline !important;
+    text-decoration: none !important;
+    border: none !important;
+}
+
+.bare-link{
+    text-decoration: none;
+    border: none;
+}
+
+.thumbnail-wrapper img{
+    border: 1px solid #dddddd;
+    padding: 2px;
+}
+
+.wpforms-container form label {
+    font-size: .85em !important;
+    font-weight: normal !important;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.form-control input[type='text'],
+.form-control select,
+.form-control textarea {
+    font-size: .85em !important;
+    border-radius: 4px !important;
+}
+
+button[type='submit'].wpforms-submit {
+    display: inline-block !important;
+    padding: 6px 12px !important;
+    margin-bottom: 0 !important;
+    font-size: 14px !important;
+    font-weight: normal !important;
+    line-height: 1.42857143 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    cursor: pointer !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    background-image: none !important;
+    border: 1px solid transparent !important;
+    border-radius: 4px !important;
+}
+
+button[type='submit'].wpforms-submit {
+    color: #fff !important;
+    background-color: #428bca !important;
+    border-color: #357ebd !important;
+    font-size: .8em !important;
+}
+
+button[type='submit']
+button[type='submit']:hover,
+button[type='submit']:focus,
+button[type='submit']:active,
+button[type='submit'].active  {
+    color: #fff !important;
+    background-color: #3276b1 !important;
+    border-color: #285e8e !important;
+}
+
+.excerpt_container{
+    font-size: .8em !important;
+}
+
+a .row div.excerpt_container p{
+    color: #4c4c4d !important;
+}
+
+.sidebar-excerpt p{
+    font-size: .85em !important;
+}
+
+.bottom-border-dotted {
+    border-bottom: 1px dotted #dddddd;
+    padding-bottom: 6px;
+}
+
+.load-large-image {
+    cursor: pointer;
+}
+
+.default-error-container{
+
+}
+
+.content-container p,
+.content-container div{
+    font-size: .95em;
+    line-height: 1.3em;
+    margin-top: 8px;
+}
+
+ul.hotel-features li {
+    display: block;
+    font-size: .8em;
+    border-bottom: 1px solid #cccccc;
+    line-height: 2em;
+}
+
+.load-large-image {
+    display: block;
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    padding: 5px;
+}
+
+.load-large-image span {
+    font-size: .85em;
+}
+
+.image-deco img {
+    border: 1px solid #adadad;
+    background: #dddddd;
+    padding: 4px;
+    width:95%;
+}
+
+.product-feature-row {
+    font-size: .8em;
+    border-bottom: 1px solid #dddddd;
+    margin: 10px 0 5px 0;
+}
+
+.product-feature-row .col-md-9 {
+    border-left: 1px solid #dddddd;
+}
+
+.feature-label {
+    font-weight:bold;
+}
+
+.feature-heading {
+    background: #666666;
+    padding:15px;
+}

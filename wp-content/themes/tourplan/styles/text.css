@@ -1,0 +1,135 @@
+/*Sizes */
+.text-normal{
+    font-size: 1em;
+}
+
+.text-small{
+    font-size: .8em !important;
+}
+
+.text-small-button{
+    font-size: .7em !important;
+}
+
+.text-medium-small{
+    font-size: .95em !important;
+}
+
+.text-medium{
+    font-size: 1.2em;
+}
+
+.text-large{
+    font-size: 1.5em;
+}
+
+.text-larger{
+    font-size: 2em !important;
+}
+
+.text-largest{
+    font-size: 2.5em !important;
+}
+
+/*Colors*/
+.text-black{
+    color: #000;
+}
+
+.text-red{
+    color: #ff0000 !important;
+}
+
+.text-gray{
+    color: #656565 !important;
+}
+
+.text-gray-light{
+    color: #999999;
+}
+
+.text-gray-dark{
+    color: #343434;
+}
+
+.text-blue{
+    color: #00A8EF;
+}
+
+.text-blue-dark{
+    color: #0A246A;
+}
+
+.text-green{
+    color: #01a252;
+}
+
+.text-green-dark{
+    color: #3c763d;
+}
+
+.text-white{
+    color: #fff !important;
+}
+
+.text-beige{
+    color: #9d937c !important;
+}
+
+/* Line height */
+.lh-normal{
+    line-height: normal;
+}
+
+.lh-50{
+    line-height: .5em !important;
+}
+
+.lh-80{
+    line-height: .8em !important;
+}
+
+.lh-150{
+    line-height: 1.5em !important;
+}
+
+.lh-200{
+    line-height: 2em;
+}
+
+.text-upper{
+    text-transform: uppercase;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+/* text alignment */
+.text-justify{
+    text-align: justify;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+.weight-normal, .weight-normal label{
+    font-weight: normal !important;
+}
+
+.line-height-normal, .line-height-normal p {
+    line-height: 100% !important;
+}
+
+.line-height-dedh, .line-height-dedh p {
+    line-height: 150% !important;
+}
+
+.line-height-double, .line-height-double p {
+    line-height: 200% !important;
+}
+
+.line-height-triple, .line-height-triple p {
+    line-height: 300% !important;
+}
