@@ -457,14 +457,22 @@ class WPForms_Lite {
 		?>
 
 		<div id="wpforms-entries" class="wrap">
-			<h1 class="page-title">
-				Entries
-			</h1>
+			<h1 class="page-title">Entries</h1>
 			<div class="notice notice-info below-h2">
 				<p><strong>Entry management and storage is a PRO feature.</strong></p>
-				<p>Please upgrade to the PRO plan to unlock it and more awesome features.</p>
-				<p><a href="<?php echo $this->upgrade_link(); ?>" class="button button-primary" target="_blank" rel="noopener">Upgrade Now</a></p>
 			</div>
+
+			<h3>Want to be able to view and manage all your form entries right from your WordPress dashboard?</h3>
+
+			<p>Once you upgrade to the Pro version of WPForms, all future form entries will be stored in your WordPress database and displayed right here.</p>
+
+			<p>You’ll be able to easily sort entries by form, favorite your leads, mark entries as read, and even delete the ones you don’t want.</p>
+
+			<p>With WPForms Pro, all entries can be exported to CSV files (Excel) as well.</p>
+
+			<p>To unlock the full power of WPForms and start saving your entries here, click here to upgrade:</p>
+
+			<p><a href="<?php echo $this->upgrade_link(); ?>" class="button button-primary" target="_blank" rel="noopener">Upgrade Now</a></p>
 		</div>
 		<?php
 	}

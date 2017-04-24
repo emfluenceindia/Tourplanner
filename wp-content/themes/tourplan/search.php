@@ -1,18 +1,18 @@
 <?php get_header(); ?>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3">
-            <?php
-            //Activate Sidebars here...
-            if(is_active_sidebar('sidebar-1')) {
-                dynamic_sidebar('sidebar-1');
-            }
-            ?>
-        </div>
-        <div class="col-md-9">
-            <h1 class="text-larger cabin-c module-head">Search Result</h1>
-            <div class="margin-top-10"></div>
-            <?php
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <?php
+                //Activate Sidebars here...
+                if(is_active_sidebar('sidebar-1')) {
+                    dynamic_sidebar('sidebar-1');
+                }
+                ?>
+            </div>
+            <div class="col-md-9">
+                <h1 class="text-larger cabin-c module-head">Search Result</h1>
+                <div class="margin-top-10"></div>
+                <?php
                 $count = 0;
                 if(have_posts()) :?>
                     <?php //global $wp_query; ?>
@@ -20,10 +20,10 @@
                     <hr />
                     <?php while(have_posts()) : the_post(); ?>
                         <?php
-                            $postType = get_post_type(get_the_ID());
-                            $obj_postType = get_post_type_object($postType);
-                            $post_type_url = get_archive_link($postType);
-                            //echo $postType;
+                        $postType = get_post_type(get_the_ID());
+                        $obj_postType = get_post_type_object($postType);
+                        $post_type_url = get_archive_link($postType);
+                        //echo $postType;
                         ?>
                         <?php if($postType == 'trips'){ ?>
                             <div class="pad-10 bg-white border-gray margin-bottom-10">
@@ -125,11 +125,11 @@
                         'add_args' => array( 'place' => 1, 'type' => 4),
                     ));*/
                 endif;
-            ?>
+                ?>
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="clearfix"></div>
     </div>
-</div>
 
 <?php if ( have_posts() ) :
     /* Start the Loop */
@@ -146,11 +146,11 @@
 
     endwhile; // End of the loop.
 
-    /*the_posts_pagination( array(
-        'prev_text' => twentyseventeen_get_svg( array( 'icon' => 'arrow-left' ) ) . '<span class="screen-reader-text">' . __( 'Previous page', 'twentyseventeen' ) . '</span>',
-        'next_text' => '<span class="screen-reader-text">' . __( 'Next page', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'arrow-right' ) ),
-        'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyseventeen' ) . ' </span>',
-    ) );*/
+/*the_posts_pagination( array(
+    'prev_text' => twentyseventeen_get_svg( array( 'icon' => 'arrow-left' ) ) . '<span class="screen-reader-text">' . __( 'Previous page', 'twentyseventeen' ) . '</span>',
+    'next_text' => '<span class="screen-reader-text">' . __( 'Next page', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'arrow-right' ) ),
+    'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyseventeen' ) . ' </span>',
+) );*/
 
 else : ?>
 
