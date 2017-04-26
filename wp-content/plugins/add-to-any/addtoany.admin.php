@@ -4,8 +4,7 @@
  * Post options
  */
 function A2A_SHARE_SAVE_add_meta_box() {
-	// get_post_types() only included in WP 2.9/3.0
-	$post_types = ( function_exists( 'get_post_types' ) ) ? get_post_types( array( 'public' => true ) ) : array( 'post', 'page' ) ;
+	$post_types = get_post_types( array( 'public' => true ) );
 	
 	$options = get_option( 'addtoany_options' );
 	
@@ -17,11 +16,11 @@ function A2A_SHARE_SAVE_add_meta_box() {
 			isset( $options['floating_vertical'] ) && 'none' != $options['floating_vertical'] ||
 			isset( $options['floating_horizontal'] ) && 'none' != $options['floating_horizontal'] ||
 			// for standard buttons in posts
-			'post' == $post_type && isset( $options['display_in_posts'] ) && $options['display_in_posts'] != '-1' ||
+			'post' == $post_type && ( ! isset( $options['display_in_posts'] ) || $options['display_in_posts'] != '-1' ) ||
 			// for standard buttons in pages
-			'page' == $post_type && isset( $options['display_in_pages'] ) && $options['display_in_pages'] != '-1' ||
+			'page' == $post_type && ( ! isset( $options['display_in_pages'] ) || $options['display_in_pages'] != '-1' ) ||
 			// for standard buttons in a custom post type
-			isset( $options['display_in_cpt_' . $post_type] ) && $options['display_in_cpt_' . $post_type] != '-1'
+			! isset( $options['display_in_cpt_' . $post_type] ) || $options['display_in_cpt_' . $post_type] != '-1'
 		) {
 			// Add meta box
 			add_meta_box( 'A2A_SHARE_SAVE_meta', $title, 'A2A_SHARE_SAVE_meta_box_content', $post_type, 'advanced', 'high' );
