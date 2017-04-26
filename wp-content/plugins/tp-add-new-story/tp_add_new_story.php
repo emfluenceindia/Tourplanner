@@ -53,7 +53,7 @@ function story_custom_post_type() {
         'capability_type' => 'post',
         'supports' => $supports,
         'rewrite' => $rewrite,
-        'register_meta_box_cb' => 'add_story_metaboxes'
+        'register_meta_box_cb' => 'add_story_metaboxes',
     );
 
     register_post_type('user_story', $args);

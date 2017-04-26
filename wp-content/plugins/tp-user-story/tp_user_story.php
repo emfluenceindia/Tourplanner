@@ -30,7 +30,11 @@ function register_travelog() {
         'menu_position' => 27,
         'hierarchical' => false,
         'rewrite' => array('slug', 'travelog'),
-        'supports' => $supports
+        'supports' => $supports,
+        //REST API support
+        'show_in_rest' => true,
+        'rest_base' => 'api/travelog',
+        'rest_controller_class' => 'WP_REST_Posts_Controller',
     );
 
     register_post_type('travelog', $args);

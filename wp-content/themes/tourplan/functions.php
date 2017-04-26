@@ -1122,4 +1122,17 @@
     add_action('wp_ajax_save-attachment', function($array, $int) {
         var_dump('save-attachment');
     }, 10, 2);
+
+    add_action('init', 'travelg_post_type_rest_support_add', 25);
+
+    function travelg_post_type_rest_support_add() {
+        global $wp_post_types;
+
+        $post_type_name = 'trips';
+        if(isset($wp_post_types[$post_type_name])) {
+            $wp_post_types[$post_type_name]->show_in_rest = true;
+            $wp_post_types[$post_type_name]->rest_base = 'api/trips';
+            $wp_post_types[$post_type_name]->rest_controller_class = 'WP_REST_Posts_Controller';
+        }
+    }
 ?>
