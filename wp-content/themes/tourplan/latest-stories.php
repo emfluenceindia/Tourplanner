@@ -2,7 +2,7 @@
 /*
  * Template name: Latest Travel stories
  */
-$request = wp_remote_get( 'http://local.tourplanner.com/wp-json/wp/v2/api/travelog?per_page=2' );
+$request = wp_remote_get( 'http://local.tourplanner.com/wp-json/wp/v2/api/trips?per_page=3' );
 //$request = wp_remote_get('https://jsonplaceholder.typicode.com/posts/1');
 
 if( is_wp_error( $request ) ) {
@@ -11,11 +11,16 @@ if( is_wp_error( $request ) ) {
 $body = wp_remote_retrieve_body( $request );
 //var_dump($body);
 
-$data = json_decode( $body, true );
+$data = json_decode($body);
+foreach($data as $item) {
+    echo $item->id . ' ' . $item->date  . ' ' . $item->slug  . ' ' . $item->title->rendered .   '<br />';
+}
 //var_dump($data);
+/*
 foreach ($data as $key => $value) {
     echo $value["id"] . ", " . $value["title"] . "<br>";
 }
+*/
 
 /*var_dump($data[0]);
 
