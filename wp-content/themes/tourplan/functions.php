@@ -156,6 +156,12 @@
             'id' => 'upcoming-stories-sidebar',
             'description' => __('Lists upcoming stores in a sidebar', 'tourplan')
         ));
+
+        register_sidebar(array(
+            'name' => __('Latest Stories', 'tourplan'),
+            'id' => 'latest-stories-sidebar',
+            'description' => __('Lists latest stories in a sidebar', 'tourplan')
+        ));
     }
 
     /* Hook to register sidebars */

@@ -11,7 +11,7 @@
                     'meta_key' => 'display_on_hompage',
                     'meta_value' => 'Yes',
                     //'s' => 'dharam',
-                    'posts_per_page' => 6,
+                    'posts_per_page' => 9,
                     'paged' => $currentPage));
 
                 //echo $query->request;
