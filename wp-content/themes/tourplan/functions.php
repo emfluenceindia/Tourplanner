@@ -1157,11 +1157,34 @@
         $intro = get_post_meta($post_id, 'introduction', true);
         if(is_single()) { //If we are on a single-* page we print meta value of the post
             if($post_type == 'trips') {
-                echo "<p class='text-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+                //echo "<p class='text-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+                do_action('tourplan_custom_excerpt_page_anchor', 40, 'storyline');
             }
         } else { //print customized content excerpt
             echo excerpt(25);
         }
     }
+
+    add_action('tourplan_custom_excerpt_page_anchor', 'custom_excerpt_page_anchor', 10, 2);
+
+    function custom_excerpt_page_anchor($limit, $anchor) {
+        $excerpt = explode(' ', get_the_excerpt(), $limit);
+        if(count($excerpt)>=$limit) {
+            array_pop($excerpt);
+            $excerpt = implode(' ', $excerpt) . '...';
+        } else {
+            $excerpt = implode(' ', $excerpt);
+        } ?>
+
+        <div class="row">
+            <div class="col-md-1"><div class="margin-top-20"></div><span class="fa fa-link text-larger text-gray"></span></div>
+            <div class="col-md-11">
+                <div class="text-small margin-top-10 margin-bottom-10">
+                    <a class="text-gray storyline-anchor" href="#<?php echo $anchor ?>"><?php echo $excerpt ?></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    <?php }
 
 ?>

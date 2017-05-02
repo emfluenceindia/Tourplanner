@@ -28,7 +28,7 @@
             //http://stackoverflow.com/questions/2843356/can-i-pass-arguments-to-my-function-through-add-action
             //Benefit: we are now able to REUSE this action hook anywhere we want in our application making it more robust and clean.
             do_action('tourplan_trip_intro', $post->ID);
-
+            echo '<div class="margin-top-10"></div>';
             the_category(', ');
 
             echo '<hr />';
@@ -49,7 +49,8 @@
         </div><!-- .post-thumbnail -->
     <?php endif; ?>
 
-    <div class="margin-top-20 text-medium-small">
+    <a name="storyline"></a>
+    <div class="margin-top-20 text-medium-small story-line">
         <?php
         /* translators: %s: Name of current post */
         the_content( sprintf(

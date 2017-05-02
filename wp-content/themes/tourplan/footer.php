@@ -31,12 +31,26 @@
                     $(this).removeAttr('width');
                     $(this).removeAttr('height');
                 });
+
+                $(".storyline-anchor").click(function() {
+                    scrollToAnchor();
+                });
             });
+
+            function scrollToAnchor(){
+                var aTag = $(".story-line");
+                $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+            }
 
             function enlargeImage(obj) {
                 var thisImage = $(obj).find('img').attr('src');
                 $('.main-post-image').find('img').attr('src', thisImage);
             }
+
+            /*$('a[href*=\\#]').on('click', function(event){
+                event.preventDefault();
+                $('html,body').animate({scrollTop:$(this.hash).offset().top}, 500);
+            });*/
         </script>
     </body>
 </html>
