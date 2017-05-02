@@ -1153,9 +1153,12 @@
     add_action('tourplan_trip_intro', 'tourplan_get_trip_intro', 10, 1);
 
     function tourplan_get_trip_intro($post_id) {
+        $post_type = get_post_type();
         $intro = get_post_meta($post_id, 'introduction', true);
         if(is_single()) { //If we are on a single-* page we print meta value of the post
-            echo "<p class='text-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+            if($post_type == 'trips') {
+                echo "<p class='text-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+            }
         } else { //print customized content excerpt
             echo excerpt(25);
         }
