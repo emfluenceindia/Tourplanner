@@ -1141,4 +1141,24 @@
             $wp_post_types[$post_type_name]->rest_controller_class = 'WP_REST_Posts_Controller';
         }
     }
+
+    /* Learning about Hooks (Actions and Filters) */
+
+    /*
+     * Test 01: Adding a Custom Menu in Admin
+     * Reference: http://blog.teamtreehouse.com/hooks-wordpress-actions-filters-examples
+     */
+
+    function register_custom_menu_in_admin() {
+        //Function to add a menu is add_menu_page
+        //syntax: add_menu_page($page_title, $menu_title, $capability, $menu_slug, callable $function = '', $icon_url, $position = null)
+        //Reference: https://developer.wordpress.org/reference/functions/add_menu_page/
+
+        add_menu_page('Custom Menu Page', 'Custom Menu Title', 'manage_options', 'myplugin/myplugin-admin.php', '', 'dashicon-admin-site', 6);
+    }
+
+    add_action('admin_menu', 'register_custom_menu_in_admin');
+
+
+
 ?>
