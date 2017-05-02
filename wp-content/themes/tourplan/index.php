@@ -21,7 +21,12 @@
                             <div class="bg-white pad-10 border-gray grid-box">
                                 <p class="grid-featured-image-container"><a title="<?php the_title(); ?>" href="<?php the_permalink(); ?>"><?php echo get_the_post_thumbnail(); ?></a></p>
                                 <h3 class="grid-title"><a class="text-gray text-small lh-50" title="<?php the_title(); ?>" href="<?php the_permalink(); ?>"><?php echo the_title(); ?></a></h3>
-                                <div class="grid-excerpt"><?php echo excerpt(25); ?></div>
+                                <div class="grid-excerpt">
+                                    <?php
+                                        //echo excerpt(25);
+                                        do_action('tourplan_trip_intro', $post->ID);
+                                    ?>
+                                </div>
                                 <div class="cat-links"><?php //the_category(', '); ?></div>
                                 <?php if(function_exists('the_ratings')) { the_ratings(); } ?>
                             </div>

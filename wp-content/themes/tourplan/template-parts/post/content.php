@@ -20,7 +20,15 @@
         if ( is_single() ) {
             $intro = get_post_meta($post->ID, 'introduction', true);
             the_title( '<h1 class="entry-title module-head roboto-c bold">', '</h1>' );
-            echo "<p class='text-medium-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+            //echo "<p class='text-medium-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+
+            //Instead of writing above line we shall use our own hook to display it!!
+            //Learning resources:
+            //https://www.youtube.com/watch?v=z_U85dV6LuM
+            //http://stackoverflow.com/questions/2843356/can-i-pass-arguments-to-my-function-through-add-action
+            //Benefit: we are now able to REUSE this action hook anywhere we want in our application making it more robust and clean.
+            do_action('tourplan_trip_intro', $post->ID);
+
             the_category(', ');
 
             echo '<hr />';

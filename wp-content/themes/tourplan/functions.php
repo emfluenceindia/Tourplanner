@@ -1144,21 +1144,21 @@
 
     /* Learning about Hooks (Actions and Filters) */
 
-    /*
-     * Test 01: Adding a Custom Menu in Admin
-     * Reference: http://blog.teamtreehouse.com/hooks-wordpress-actions-filters-examples
-     */
+    /* Creating own ACTION HOOK and tying multiple functions to it */
 
-    function register_custom_menu_in_admin() {
-        //Function to add a menu is add_menu_page
-        //syntax: add_menu_page($page_title, $menu_title, $capability, $menu_slug, callable $function = '', $icon_url, $position = null)
-        //Reference: https://developer.wordpress.org/reference/functions/add_menu_page/
+    //Syntax: add_action($tag, $function_to_add, 10, 1)
+    // 10 = priority (default), 1 = number of paramters function would accept. If none is defined the function will either accept none
+    // or the default number of parameters available
 
-        add_menu_page('Custom Menu Page', 'Custom Menu Title', 'manage_options', 'myplugin/myplugin-admin.php', '', 'dashicon-admin-site', 6);
+    add_action('tourplan_trip_intro', 'tourplan_get_trip_intro', 10, 1);
+
+    function tourplan_get_trip_intro($post_id) {
+        $intro = get_post_meta($post_id, 'introduction', true);
+        if(is_single()) { //If we are on a single-* page we print meta value of the post
+            echo "<p class='text-small margin-top-10 bg-gray-light pad-10 border-gray-dark'>" . $intro . "</p>";
+        } else { //print customized content excerpt
+            echo excerpt(25);
+        }
     }
-
-    add_action('admin_menu', 'register_custom_menu_in_admin');
-
-
 
 ?>

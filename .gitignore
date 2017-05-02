@@ -40,3 +40,8 @@ Thumbs.db
 ##############################
 .idea
 .gitignore~
+
+# Others (specific files) #
+##############################
+GeoIP.dat
+GeoIPv6.dat
