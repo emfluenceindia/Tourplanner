@@ -1180,7 +1180,7 @@
             <div class="col-md-1"><div class="margin-top-20"></div><span class="fa fa-link text-larger text-gray"></span></div>
             <div class="col-md-11">
                 <div class="text-small margin-top-10 margin-bottom-10">
-                    <a class="text-gray storyline-anchor" href="#<?php echo $anchor ?>"><?php echo $excerpt ?></a>
+                    <a class="text-gray storyline-anchor"><?php echo $excerpt ?></a>
                 </div>
             </div>
             <div class="clearfix"></div>

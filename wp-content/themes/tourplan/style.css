@@ -591,3 +591,7 @@ ul.hotel-features li {
     background: #666666;
     padding:15px;
 }
+
+a {
+   cursor: pointer;
+}
