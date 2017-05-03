@@ -4,6 +4,22 @@
         <div class="col-md-9">
             <div class="row">
                 <?php
+
+                //Create a term dynamically and add into database using wp_insert_term
+                //Syntax: wp_insert_term($term, $taxonomy, $args = array()) {}
+                $arr_term = array(
+                    'description' => 'Cabin for honeymoon couple',
+                    'slug' => 'honeymoon-cabin'
+                );
+
+                $new_term = wp_insert_term('Honeymoon Cabin', 'amenities', $arr_term);
+                $new_term_id = $new_term['term_id'];
+
+                //Dynamic hook used: create_{$taxonomy}
+                do_action('create_amenities', $new_term_id);
+
+                wp_delete_term($new_term_id, 'amenities');
+
                 //Pagination with custom query: https://www.youtube.com/watch?v=HMscydyViZw&list=PLofGaVT53aP8OCWq_aqrtIowZ7vkqzbo5
                 $currentPage = get_query_var('paged');
                 $query = new WP_Query(array(
