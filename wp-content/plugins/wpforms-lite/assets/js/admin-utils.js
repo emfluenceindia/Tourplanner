@@ -96,7 +96,7 @@ var wpf = {
 		// Preserve the order of field choices
 		for(var key in fields) {
 			if (fields[key].choices) {
-				jQuery('#wpforms-field-option-row-'+fields[key].id+'-choices li').each(function(index, ele) {
+				jQuery('#wpforms-field-option-row-'+fields[key].id+'-choices .choices-list li').each(function(index, ele) {
 					var choiceKey = jQuery(ele).data('key');
 					fields[key].choices['choice_'+choiceKey] = fields[key].choices[choiceKey];
 					fields[key].choices['choice_'+choiceKey].key = choiceKey;

@@ -89,8 +89,9 @@ class WPForms_Builder {
 			// Load builder panels
 			$this->load_panels();
 
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueues' ) );
-			add_action( 'wpforms_admin_page',    array( $this, 'output'   ) );
+			add_action( 'admin_enqueue_scripts',      array( $this, 'enqueues'       ) );
+			add_action( 'admin_print_footer_scripts', array( $this, 'footer_scripts' ) );
+			add_action( 'wpforms_admin_page',         array( $this, 'output'         ) );
 
 			// Provide hook for add-ons
 			do_action( 'wpforms_builder_init', $this->view );
@@ -269,6 +270,13 @@ class WPForms_Builder {
 
 		$strings = array(
 			'ajax_url'               => admin_url( 'admin-ajax.php' ),
+			'bulk_add_button'        => __( 'Add New Choices', 'wpforms '),
+			'bulk_add_show'          => __( 'Bulk Add', 'wpforms' ),
+			'bulk_add_hide'          => __( 'Hide Bulk Add', 'wpforms' ),
+			'bulk_add_heading'       => __( 'Add Choices (one per line)', 'wpforms '),
+			'bulk_add_placeholder'   => __( "Blue\nRed\nGreen", 'wpforms '),
+			'bulk_add_presets_show'  => __( 'Show presets', 'wpforms '),
+			'bulk_add_presets_hide'  => __( 'Hide presets', 'wpforms '),
 			'date_select_day'        => __( 'DD', 'wpforms' ),
 			'date_select_month'      => __( 'MM', 'wpforms' ),
 			'dynamic_choice_limit'   => __( 'The {source} {type} contains over {limit} items ({total}). This may make the field difficult for your vistors to use and/or cause the form to be slow.', 'wpforms' ),
@@ -292,6 +300,10 @@ class WPForms_Builder {
 			'saving'                 => __( 'Saving ...', 'wpforms' ),
 			'saved'                  => __( 'Saved!', 'wpforms' ),
 			'save_exit'              => __( 'Save and Exit', 'wpforms' ),
+			'layout_selector_show'   => __( 'Show Layouts', 'wpforms' ),
+			'layout_selector_hide'   => __( 'Hide Layouts', 'wpforms' ),
+			'layout_selector_layout' => __( 'Select your layout', 'wpforms' ),
+			'layout_selector_column' => __( 'Select your column', 'wpforms' ),
 			'loading'                => __( 'Loading', 'wpforms' ),
 			'template_name'          => !empty( $this->template['name'] ) ? $this->template['name'] : '',
 			'template_slug'          => !empty( $this->template['slug'] ) ? $this->template['slug'] : '',
@@ -335,6 +347,44 @@ class WPForms_Builder {
 
 		// Hook for add-ons
 		do_action( 'wpforms_builder_enqueues', $this->view );
+	}
+
+	/**
+	 * Footer javascript.
+	 *
+	 * @since 1.3.7
+	 */
+	public function footer_scripts() {
+
+		$choices = array(
+			'countries' => array(
+				'name'    => __( 'Countries', 'wpforms' ),
+				'choices' => array_values( wpforms_countries() ),
+			),
+			'countries_postal' => array(
+				'name'    => __( 'Countries Postal Code', 'wpforms' ),
+				'choices' => array_keys( wpforms_countries() ),
+			),
+			'states' => array(
+				'name'    => __( 'States', 'wpforms' ),
+				'choices' => array_values( wpforms_us_states() ),
+			),
+			'states_postal' => array(
+				'name'    => __( 'States Postal Code', 'wpforms' ),
+				'choices' => array_keys( wpforms_us_states() ),
+			),
+			'months' => array(
+				'name'    => __( 'Months', 'wpforms' ),
+				'choices' => array_values( wpforms_months() ),
+			),
+			'days' => array(
+				'name'    => __( 'Days', 'wpforms' ),
+				'choices' => array_values( wpforms_days() ),
+			),
+		);
+		$choices = apply_filters( 'wpforms_builder_preset_choices', $choices );
+
+		echo '<script type="text/javascript">wpforms_preset_choices=' . wp_json_encode( $choices ) . '</script>';
 	}
 
 	/**

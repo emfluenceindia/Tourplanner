@@ -706,18 +706,20 @@ abstract class WPForms_Provider {
 
 			$output .= sprintf( '<select name="providers[%s][%s][list_id]">', $this->slug, $connection_id );
 
-				foreach ( $lists as $list ) {
-					$output .= sprintf(
-						'<option value="%s" %s>%s</option>',
-						esc_attr( $list['id'] ),
-						selected( $selected, $list['id'], false ),
-						esc_attr( $list['name'] )
-					);
-				}
+		if ( ! empty( $lists ) ) {
+			foreach ( $lists as $list ) {
+				$output .= sprintf(
+					'<option value="%s" %s>%s</option>',
+					esc_attr( $list['id'] ),
+					selected( $selected, $list['id'], false ),
+					esc_attr( $list['name'] )
+				);
+			}
+		}
 
 			$output .= '</select>';
 
-		$output .='</div>';
+		$output .= '</div>';
 
 		return $output;
 	}
@@ -1198,7 +1200,10 @@ abstract class WPForms_Provider {
 
 		if ( is_wp_error( $auth ) ) {
 
-			wp_send_json_error( array( 'error' => 'Could not connect to the provider.' ) );
+			wp_send_json_error( array(
+				'error'     => 'Could not connect to the provider.',
+				'error_msg' => $auth->get_error_message(),
+			) );
 
 		} else {
 

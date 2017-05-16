@@ -1190,7 +1190,7 @@
     add_action('create_amenities', 'tourplan_print_new_term_id_after_creation', 10, 1);
 
     function tourplan_print_new_term_id_after_creation($term_id) {
-        echo "Newly added term id is: " . $term_id;
+        //echo "Newly added term id is: " . $term_id;
     }
 
 ?>

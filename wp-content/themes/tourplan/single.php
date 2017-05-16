@@ -20,6 +20,12 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
+                    <?php
+                        global $wp;
+                        $request_url=$_SERVER['REQUEST_URI'];
+                        $current_url = home_url(add_query_arg(array(),$wp->request));
+                        echo $request_url;
+                    ?>
                     <?php if(function_exists('the_ratings')) { the_ratings(); } ?>
                 </div>
                 <div class="clearfix"></div>
@@ -39,6 +45,14 @@
                 if(is_active_sidebar('packaged-tour')) {
                     dynamic_sidebar('packaged-tour');
                 }
+
+            the_post_navigation( array(
+                'prev_text' => __( 'Previous Post'),
+                'next_text' => __( 'Next Post'),
+                'in_same_term' => true,
+                'excluded_term' => '23',
+                'taxonomy' => 'category'
+            ));
             ?>
         </div>
         <div class="col-md-3">

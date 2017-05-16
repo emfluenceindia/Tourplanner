@@ -184,17 +184,6 @@
 		 */
 		bindUIActionsPanels: function() {
 
-			// Toggle Smart Tags
-			$(document).on('click', '.toggle-smart-tag-display', function(e) {
-				e.preventDefault();
-				WPFormsBuilder.smartTagToggle(this);
-			});
-
-			$(document).on('click', '.smart-tags-list-display a', function(e) {
-				e.preventDefault();
-				WPFormsBuilder.smartTagInsert(this);
-			});
-
 			// Panel switching
 			$(document).on('click', '#wpforms-panels-toggle button, .wpforms-panel-switch', function(e) {
 				e.preventDefault();
@@ -205,105 +194,6 @@
 			$(document).on('click', '.wpforms-panel .wpforms-panel-sidebar-section', function(e) {
 				WPFormsBuilder.panelSectionSwitch(this, e);
 			});
-		},
-
-		/**
-		 * Smart Tag toggling.
-		 *
-		 * @since 1.0.1
-		 */
-		smartTagToggle: function(el) {
-
-			var $this   = $(el),
-				$label  = $this.closest('label');
-
-			if ( $this.hasClass('smart-tag-showing') ) {
-
-				// Smart tags are showing, so hide/remove them
-				var $list = $label.next('.smart-tags-list-display');
-				$list.slideUp(400, function() {
-					$list.remove();
-				});
-				$this.find('span').text(wpforms_builder.smart_tags_show);
-			} else {
-
-				// Show all fields or narrow to specific field types
-				var allowed = $this.data('fields'),
-					type    = $this.data('type');
-				if ( allowed.length ) {
-					var fields = wpf.getFields(allowed.split(','));
-				} else {
-					var fields = wpf.getFields();
-				}
-
-				// Create smart tags list
-				var smartTagList = '<ul class="smart-tags-list-display">';
-
-				if (type === 'fields' || type === 'all') {
-					if (!fields) {
-						smartTagList += '<li class="heading">'+wpforms_builder.fields_unavailable+'</li>';
-					} else {
-						smartTagList += '<li class="heading">'+wpforms_builder.fields_available+'</li>';
-						for(var key in fields) {
-							if (fields[key].label) {
-								var label = wpf.sanitizeString(fields[key].label);
-							} else {
-								var label = wpforms_builder.field+' #'+fields[key].id;
-							}
-							smartTagList += '<li><a href="#" data-type="field" data-meta=\'' + fields[key].id + '\'>'+label+'</a></li>';
-						}
-					}
-				}
-
-				if (type === 'other' || type === 'all') {
-					smartTagList += '<li class="heading">'+wpforms_builder.other+'</li>';
-					for(var key in wpforms_builder.smart_tags) {
-						smartTagList += '<li><a href="#" data-type="other" data-meta=\'' + key+ '\'>'+wpforms_builder.smart_tags[key]+'</a></li>';
-					}
-				}
-
-				smartTagList += '</ul>';
-
-				$label.after(smartTagList);
-				$label.next('.smart-tags-list-display').slideDown();
-				$this.find('span').text(wpforms_builder.smart_tags_hide);
-			}
-
-			$this.toggleClass('smart-tag-showing');
-		},
-
-		/**
-		 * Smart Tag insert.
-		 *
-		 * @since 1.0.1
-		 */
-		smartTagInsert: function(el) {
-
-			var $this   = $(el),
-				$list   = $this.closest('.smart-tags-list-display'),
-				$parent = $list.parent(),
-				$label  = $parent.find('label'),
-				$input  = $parent.find('input[type=text]'),
-				meta    = $this.data('meta'),
-				type    = $this.data('type');
-
-			if ( ! $input.length ) {
-				$input  = $parent.find('textarea');
-			}
-
-			// insert smart tag
-			if ( type === 'field' ) {
-				$input.insertAtCaret('{field_id="'+meta+'"}');
-			} else {
-				$input.insertAtCaret('{'+meta+'}');
-			}
-
-			// remove list, all done!
-			$list.slideUp(400, function() {
-				$list.remove();
-			});
-
-			$label.find('.toggle-smart-tag-display span').text(wpforms_builder.smart_tags_show);
 		},
 
 		/**
@@ -592,35 +482,45 @@
 				WPFormsBuilder.fieldChoiceUpdate(list.data('field-type'),list.data('field-id'));
 			});
 
+			// Field Choices Bulk Add
+			$(document).on('click', '.toggle-bulk-add-display', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.fieldChoiceBulkAddToggle(this);
+			});
+			$(document).on('click', '.toggle-bulk-add-presets', function(e) {
+				e.preventDefault();
+				var $presetList = $(this).closest('.bulk-add-display').find('ul');
+				if ( $presetList.css('display') === 'block' ) {
+					$(this).text(wpforms_builder.bulk_add_presets_show);
+				} else {
+					$(this).text(wpforms_builder.bulk_add_presets_hide);
+				}
+				$presetList.slideToggle();
+			});
+			$(document).on('click', '.bulk-add-preset-insert', function(e) {
+				e.preventDefault();
+				var $this         = $(this),
+					preset        = $this.data('preset'),
+					$container    = $this.closest('.bulk-add-display'),
+					$presetList   = $container.find('ul'),
+					$presetToggle = $container.find('.toggle-bulk-add-presets'),
+					$textarea     = $container.find('textarea');
+				$textarea.val('');
+				$textarea.insertAtCaret(wpforms_preset_choices[preset].choices.join("\n"));
+				$presetToggle.text(wpforms_builder.bulk_add_presets_show);
+				$presetList.slideUp();
+			});
+			$(document).on('click', '.bulk-add-insert', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.fieldChoiceBulkAddInsert(this);
+			});
+
 			// Field Options group toggle
 			$(document).on('click', '.wpforms-field-option-group-toggle', function(e) {
 				e.preventDefault();
 				var $this = $(this);
 				$this.parent().toggleClass('wpforms-hide').find('.wpforms-field-option-group-inner').slideToggle();
 				$this.find('i').toggleClass('fa-angle-down fa-angle-right');
-			});
-
-			// Field Smart Tags display  toggle
-			$(document).on('click', '.wpforms-field-option-row-default_value .toggle-smart-tags', function(e) {
-				e.preventDefault();
-				var $this = $(this);
-				$this.toggleClass('smart-tags-hide');
-				$this.parent().next('.smart-tags-list').slideToggle();
-
-				if ( $this.hasClass('smart-tags-hide')) {
-					$this.find('span').text(wpforms_builder.smart_tags_hide);
-				} else {
-					$this.find('span').text(wpforms_builder.smart_tags_show);
-				}
-			});
-
-			// "Default" Field Smart Tag insert
-			$(document).on('click', '.wpforms-field-option-row-default_value .smart-tags-list a', function(e) {
-				e.preventDefault();
-				var $this = $(this),
- 					tag   = $this.data('value'),
-					field = $this.parent().parent().next('input[type=text]');
-				field.val(field.val()+'{'+tag+'}');
 			});
 
 			// Display toggle for Address field hide address line 2 option
@@ -914,6 +814,20 @@
 			// Checkboxes, and Multiple choice fields
 			$(document).on('change', '.wpforms-field-option-row-dynamic_taxonomy select, .wpforms-field-option-row-dynamic_post_type select', function(e) {
 				WPFormsBuilder.fieldDynamicChoiceSource($(this));
+			});
+
+			// Toggle Layout selector
+			$(document).on('click', '.toggle-layout-selector-display', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.fieldLayoutSelectorToggle(this);
+			});
+			$(document).on('click', '.layout-selector-display-layout', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.fieldLayoutSelectorLayout(this);
+			});
+			$(document).on('click', '.layout-selector-display-columns span', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.fieldLayoutSelectorInsert(this);
 			});
 		},
 
@@ -1400,7 +1314,7 @@
 				$('#wpforms-field-'+id+' .primary-input li' ).remove();
 				new_choice = '<li><input type="'+type+'" disabled>{label}</li>';
 			}
-			$('#wpforms-field-option-row-' + id + '-choices li').each( function( index ) {
+			$('#wpforms-field-option-row-' + id + '-choices .choices-list li').each( function( index ) {
 				var $this    = $(this),
 					label    = $this.find('input.label').val(),
 					selected = $this.find('input.default').is(':checked'),
@@ -1418,6 +1332,88 @@
 					}
 				}
 			});
+		},
+
+		/**
+		 * Field choice bulk add toggling.
+		 *
+		 * @since 1.3.7
+		 */
+		fieldChoiceBulkAddToggle: function(el) {
+
+			var $this   = $(el),
+				$label  = $this.closest('label');
+
+			if ( $this.hasClass('bulk-add-showing') ) {
+
+				// Import details is showing, so hide/remove it
+				var $selector = $label.next('.bulk-add-display');
+				$selector.slideUp(400, function() {
+					$selector.remove();
+				});
+				$this.find('span').text(wpforms_builder.bulk_add_show);
+			} else {
+
+				var importOptions = '<div class="bulk-add-display">';
+
+				importOptions += '<p class="heading">'+wpforms_builder.bulk_add_heading+' <a href="#" class="toggle-bulk-add-presets">'+wpforms_builder.bulk_add_presets_show+'</a></p>';
+				importOptions += '<ul>';
+					for(var key in wpforms_preset_choices) {
+						importOptions += '<li><a href="#" data-preset="'+key+'" class="bulk-add-preset-insert">'+wpforms_preset_choices[key].name+'</a></li>';
+					}
+				importOptions += '</ul>';
+				importOptions += '<textarea placeholder="'+wpforms_builder.bulk_add_placeholder+'"></textarea>';
+				importOptions += '<button class="bulk-add-insert">'+wpforms_builder.bulk_add_button+'</button>';
+				importOptions += '</div>';
+
+				$label.after(importOptions);
+				$label.next('.bulk-add-display').slideDown(400, function() {
+					$(this).find('textarea').focus();
+				});
+				$this.find('span').text(wpforms_builder.bulk_add_hide);
+			}
+
+			$this.toggleClass('bulk-add-showing');
+		},
+
+		/**
+		 * Field choice bulk insert the new choices.
+		 *
+		 * @since 1.3.7
+		 */
+		fieldChoiceBulkAddInsert: function(el) {
+
+			var $this          = $(el),
+				$container     = $this.closest('.wpforms-field-option-row'),
+				$textarea      = $container.find('textarea'),
+				$list          = $container.find('.choices-list'),
+				$choice        = $list.find('li:first-of-type').clone().wrap('<div>').parent(),
+				choice         = '',
+				fieldID        = $container.data('field-id'),
+				type           = $list.data('field-type'),
+				nextID         = Number( $list.attr('data-next-id') ),
+				newValues      = $textarea.val().split("\n"),
+				newChoices     = '';
+
+			$this.prop('disabled', true).html($this.html()+' '+s.spinner);
+			$choice.find('input.value,input.label').attr('value','');
+			choice = $choice.html();
+
+			for(var key in newValues) {
+				var value     = newValues[key],
+					newChoice = choice;
+				value = value.trim();
+				newChoice = newChoice.replace( /\[choices\]\[(\d+)\]/g ,'[choices]['+nextID+']' );
+				newChoice = newChoice.replace( /data-key="(\d+)"/g ,'data-key="'+nextID+'"' );
+				newChoice = newChoice.replace( /value="" class="label"/g ,'value="'+value+'" class="label"' );
+				newChoices += newChoice;
+				nextID++;
+			}
+			$list.attr('data-next-id', nextID).append(newChoices)
+
+			WPFormsBuilder.fieldChoiceUpdate(type, fieldID);
+			$(document).trigger('wpformsFieldChoiceAdd');
+			WPFormsBuilder.fieldChoiceBulkAddToggle( $container.find('.toggle-bulk-add-display') );
 		},
 
 		/**
@@ -1717,6 +1713,193 @@
 			});
 		},
 
+		/**
+		 * Field layout selector toggling.
+		 *
+		 * @since 1.3.7
+		 */
+		fieldLayoutSelectorToggle: function(el) {
+
+			var $this   = $(el),
+				$label  = $this.closest('label'),
+				layouts = {
+					'layout-1' : [
+						{
+							'class': 'one-half',
+							'data' : 'wpforms-one-half wpforms-first'
+						},
+						{
+							'class': 'one-half',
+							'data' : 'wpforms-one-half'
+						}
+					],
+					'layout-2' : [
+						{
+							'class': 'one-third',
+							'data' : 'wpforms-one-third wpforms-first'
+						},
+						{
+							'class': 'one-third',
+							'data' : 'wpforms-one-third'
+						},
+						{
+							'class': 'one-third',
+							'data' : 'wpforms-one-third'
+						}
+					],
+					'layout-3' : [
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth wpforms-first'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						}
+					],
+					'layout-4' : [
+						{
+							'class': 'one-third',
+							'data' : 'wpforms-one-third wpforms-first'
+						},
+						{
+							'class': 'two-third',
+							'data' : 'wpforms-two-thirds'
+						}
+					],
+					'layout-5' : [
+						{
+							'class': 'two-third',
+							'data' : 'wpforms-two-third wpforms-first'
+						},
+						{
+							'class': 'one-third',
+							'data' : 'wpforms-one-third'
+						}
+					],
+					'layout-6' : [
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth wpforms-first'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						},
+						{
+							'class': 'two-fourth',
+							'data' : 'wpforms-two-fourths'
+						}
+					],
+					'layout-7' : [
+						{
+							'class': 'two-fourth',
+							'data' : 'wpforms-two-fourths wpforms-first'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						}
+					],
+					'layout-8' : [
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth wpforms-first'
+						},
+						{
+							'class': 'two-fourth',
+							'data' : 'wpforms-two-fourths'
+						},
+						{
+							'class': 'one-fourth',
+							'data' : 'wpforms-one-fourth'
+						}
+					]
+				};
+
+			if ( $this.hasClass('layout-selector-showing') ) {
+
+				// Selector is showing, so hide/remove it
+				var $selector = $label.next('.layout-selector-display');
+				$selector.slideUp(400, function() {
+					$selector.remove();
+				});
+				$this.find('span').text(wpforms_builder.layout_selector_show);
+			} else {
+
+				// Create selector options
+				var layoutOptions = '<div class="layout-selector-display">';
+
+				layoutOptions += '<p class="heading">'+wpforms_builder.layout_selector_layout+'</p>';
+					for(var key in layouts) {
+						var layout = layouts[key];
+						layoutOptions += '<div class="layout-selector-display-layout">';
+						for(var key in layout) {
+							layoutOptions += '<span class="'+layout[key].class+'" data-classes="'+layout[key].data+'"></span>';
+						}
+						layoutOptions += '</div>';
+					}
+				layoutOptions += '</div>';
+
+				$label.after(layoutOptions);
+				$label.next('.layout-selector-display').slideDown();
+				$this.find('span').text(wpforms_builder.layout_selector_hide);
+			}
+
+			$this.toggleClass('layout-selector-showing');
+		},
+
+		/**
+		 * Field layout selector, selecting a layout.
+		 *
+		 * @since 1.3.7
+		 */
+		fieldLayoutSelectorLayout: function(el) {
+
+			var $this   = $(el),
+				$label  = $this.closest('label');
+
+			$this.parent().find('.layout-selector-display-layout').not($this).remove();
+			$this.parent().find('.heading').text(wpforms_builder.layout_selector_column);
+			$this.toggleClass('layout-selector-display-layout layout-selector-display-columns')
+		},
+
+		/**
+		 * Field layout selector, insert into class field.
+		 *
+		 * @since 1.3.7
+		 */
+		fieldLayoutSelectorInsert: function(el) {
+			var $this     = $(el),
+				$selector = $this.closest('.layout-selector-display'),
+				$parent   = $selector.parent(),
+				$label    = $parent.find('label'),
+				$input    = $parent.find('input[type=text]'),
+				classes   = $this.data('classes');
+
+			$input.insertAtCaret(classes);
+
+			// remove list, all done!
+			$selector.slideUp(400, function() {
+				$selector.remove();
+			});
+
+			$label.find('.toggle-layout-selector-display').removeClass('layout-selector-showing');
+			$label.find('.toggle-layout-selector-display span').text(wpforms_builder.layout_selector_show);
+		},
+
 		//--------------------------------------------------------------------//
 		// Settings Panel
 		//--------------------------------------------------------------------//
@@ -1866,7 +2049,7 @@
 		 */
 		notificationAdd: function() {
 
-			var nextID       = Number($('.wpforms-notifications-add').attr('data-next_id'));
+			var nextID       = Number($('.wpforms-notifications-add').attr('data-next-id'));
 				namePrompt   = wpforms_builder.notification_prompt,
 				nameField    = '<input autofocus="" type="text" id="notification-name" placeholder="'+wpforms_builder.notification_ph+'">',
 				nameError    = '<p class="error">'+wpforms_builder.notification_error+'</p>',
@@ -1883,24 +2066,26 @@
 						return false;
 					} else {
 						var $firstNotification = $('.wpforms-notification').first(),
-							$newNotification = $firstNotification.clone();
+							$newNotification   = $firstNotification.clone(),
+							newNotification    = '';
 
 						$newNotification.find('.wpforms-notification-header span').text(input.val());
 						$newNotification.find('input, textarea, select').each(function(index, el) {
 							if ($(this).attr('name')) {
 								$(this).val('').attr('name', $(this).attr('name').replace(/\[(\d+)\]/, '['+nextID+']'));
 								if ($(this).is('select')) {
-									$(this).find('option:first').prop('selected',true);
+									$(this).find('option').prop('selected',false).attr('selected',false);
+									$(this).find('option:first').prop('selected',true).attr('selected','selected');
 								} else if ( $(this).attr('type') === 'checkbox') {
-									$(this).prop('checked', false).val('1');
+									$(this).prop('checked', false).attr('checked', false).val('1');
 								} else {
-									$(this).val('');
+									$(this).val('').attr('value','');
 								}
 							}
 						});
-						$newNotification.find('.wpforms-notification-header input').val(input.val());
-						$newNotification.find('.email-msg textarea').val('{all_fields}');
-						$newNotification.find('.email-recipient input').val('{admin_email}');
+						$newNotification.find('.wpforms-notification-header input').val(input.val()).attr('value',input.val());
+						$newNotification.find('.email-msg textarea').val('{all_fields}').attr('value','{all_fields}');;
+						$newNotification.find('.email-recipient input').val('{admin_email}').attr('value','{admin_email}');
 						// Conditional logic, if present
 						var $conditionalLogic = $newNotification.find('.wpforms-conditional-block');
 						if ($conditionalLogic.length) {
@@ -1908,16 +2093,16 @@
 							$conditionalLogic.find('.wpforms-conditional-row').not(':first').remove();
 							$conditionalLogic.find('.wpforms-conditional-row').attr('data-input-name', 'settings[notifications]['+nextID+']');
 							$conditionalLogic.find('.wpforms-conditional-field').attr('data-groupid', '0').attr('data-ruleid', '0');
-							$conditionalLogic.find('.wpforms-conditional-row select').each(function(index, el) {
-								if ($(this).attr('name')) {
-									$(this).attr('name', $(this).attr('name').replace(/\[(\d+)\]\[(\d+)\]/, '[0][0]'));
-								}
-							});
 							$conditionalLogic.find('.wpforms-conditional-row').find('.value').empty().append('<select>');
 							$conditionalLogic.find('.wpforms-conditional-groups').hide();
 						}
-						$firstNotification.before( $newNotification );
-						$('.wpforms-notifications-add').attr('data-next_id', nextID+1);
+						newNotification = $newNotification.wrap('<div>').parent().html();
+						newNotification = newNotification.replace( /wpforms-panel-field-notifications-(\d+)/g, 'wpforms-panel-field-notification-'+nextID );
+						newNotification = newNotification.replace( /\[conditionals\]\[(\d+)\]\[(\d+)\]/g, '[conditionals][0][0]' );
+
+						$firstNotification.before( newNotification );
+
+						$('.wpforms-notifications-add').attr('data-next-id', nextID+1);
 					}
 				}
 			});
@@ -2084,6 +2269,17 @@
 		 */
 		bindUIActionsGeneral: function() {
 
+			// Toggle Smart Tags
+			$(document).on('click', '.toggle-smart-tag-display', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.smartTagToggle(this);
+			});
+
+			$(document).on('click', '.smart-tags-list-display a', function(e) {
+				e.preventDefault();
+				WPFormsBuilder.smartTagInsert(this);
+			});
+
 			// Field map table, update key source
 			$(document).on('input', '.wpforms-field-map-table .key-source', function(){
 				var value = $(this).val(),
@@ -2124,6 +2320,106 @@
 					formatted = wpf.amountFormat(sanitized);
 				$this.val(formatted);
 			});
+		},
+
+		/**
+		 * Smart Tag toggling.
+		 *
+		 * @since 1.0.1
+		 */
+		smartTagToggle: function(el) {
+
+			var $this   = $(el),
+				$label  = $this.closest('label');
+
+			if ( $this.hasClass('smart-tag-showing') ) {
+
+				// Smart tags are showing, so hide/remove them
+				var $list = $label.next('.smart-tags-list-display');
+				$list.slideUp(400, function() {
+					$list.remove();
+				});
+				$this.find('span').text(wpforms_builder.smart_tags_show);
+			} else {
+
+				// Show all fields or narrow to specific field types
+				var allowed = $this.data('fields'),
+					type    = $this.data('type');
+				if ( allowed && allowed.length ) {
+					var fields = wpf.getFields(allowed.split(','));
+				} else {
+					var fields = wpf.getFields();
+				}
+
+				// Create smart tags list
+				var smartTagList = '<ul class="smart-tags-list-display">';
+
+				if (type === 'fields' || type === 'all') {
+					if (!fields) {
+						smartTagList += '<li class="heading">'+wpforms_builder.fields_unavailable+'</li>';
+					} else {
+						smartTagList += '<li class="heading">'+wpforms_builder.fields_available+'</li>';
+						for(var key in fields) {
+							if (fields[key].label) {
+								var label = wpf.sanitizeString(fields[key].label);
+							} else {
+								var label = wpforms_builder.field+' #'+fields[key].id;
+							}
+							smartTagList += '<li><a href="#" data-type="field" data-meta=\'' + fields[key].id + '\'>'+label+'</a></li>';
+						}
+					}
+				}
+
+				if (type === 'other' || type === 'all') {
+					smartTagList += '<li class="heading">'+wpforms_builder.other+'</li>';
+					for(var key in wpforms_builder.smart_tags) {
+						smartTagList += '<li><a href="#" data-type="other" data-meta=\'' + key+ '\'>'+wpforms_builder.smart_tags[key]+'</a></li>';
+					}
+				}
+
+				smartTagList += '</ul>';
+
+				$label.after(smartTagList);
+				$label.next('.smart-tags-list-display').slideDown();
+				$this.find('span').text(wpforms_builder.smart_tags_hide);
+			}
+
+			$this.toggleClass('smart-tag-showing');
+		},
+
+		/**
+		 * Smart Tag insert.
+		 *
+		 * @since 1.0.1
+		 */
+		smartTagInsert: function(el) {
+
+			var $this   = $(el),
+				$list   = $this.closest('.smart-tags-list-display'),
+				$parent = $list.parent(),
+				$label  = $parent.find('label'),
+				$input  = $parent.find('input[type=text]'),
+				meta    = $this.data('meta'),
+				type    = $this.data('type');
+
+			if ( ! $input.length ) {
+				$input  = $parent.find('textarea');
+			}
+
+			// insert smart tag
+			if ( type === 'field' ) {
+				$input.insertAtCaret('{field_id="'+meta+'"}');
+			} else {
+				$input.insertAtCaret('{'+meta+'}');
+			}
+
+			// remove list, all done!
+			$list.slideUp(400, function() {
+				$list.remove();
+			});
+
+			$label.find('.toggle-smart-tag-display span').text(wpforms_builder.smart_tags_show);
+			$label.find('.toggle-smart-tag-display').removeClass('smart-tag-showing');
 		},
 
 		/**

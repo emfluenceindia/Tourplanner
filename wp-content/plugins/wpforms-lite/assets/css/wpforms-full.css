@@ -138,6 +138,10 @@ div.wpforms-container-full .wpforms-form  .wpforms-field-description {
 	margin: 8px 0 0 0;
 }
 
+div.wpforms-container-full .wpforms-form  .wpforms-field-description-before {
+	margin: 0 0 8px 0;
+}
+
 /* Labels and sub-labels */
 div.wpforms-container-full .wpforms-form .wpforms-field-label {
 	display: block;
@@ -673,7 +677,7 @@ div.wpforms-container-full .wpforms-form .wpforms-captcha-question {
 
 div.wpforms-container-full .wpforms-form .wpforms-page-indicator {
 	margin: 0 0 20px 0;
-	overflow: auto;
+	overflow: hidden;
 }
 
 /** Circles theme **/

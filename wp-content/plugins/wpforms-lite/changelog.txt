@@ -1,5 +1,24 @@
 == Changelog ==
 
+= 1.3.7.2 =
+- Fixed: Error for some users with PHP 5.4 and below
+
+= 1.3.7.1
+- Fixed: Issue sending form notifications using email fields that had confirmation enabled
+
+= 1.3.7 =
+- Added: Google Invisible reCAPTCHA support
+- Added: Custom field validation messages (see WPForms Settings page)
+- Added: Bulk add choices for Checkbox, Multiple Choice, and Dropdown fields
+- Addded: Filter to allow email notifications to include empty fields, `wpforms_email_display_empty_fields`
+- Added: Field CSS layout selector
+- Changed: Leverage `wp_json_encode` instead of native PHP function
+- Changed: Various WordPress coding standard improvements (work in progress)
+- Changed: Refactored form front-end code to allow for more customizations
+- Changed: Refactored text, textarea, email, number, nand ame fields to allow for more customizations (more coming next release)
+- Fixed: Welcome page typo
+- Fixed: SmartTag selectors getting off sync inside form builder
+
 = 1.3.6.2 =
 - Changed: Improved messaging on Entries page (Lite)
 

@@ -2,7 +2,7 @@
 Contributors: wpforms, jaredatch, smub
 Tags: contact form, contact form plugin, contact button, contact me, custom form, custom contact form, form builder, form manager, form, forms builder, forms creator, captcha, recaptcha, Akismet, email form, web form, feedback form, payment form, survey form, donation form, email submit form, message form, mailchimp, mailchimp form, aweber, aweber form, paypal, paypal form, stripe, stripe form, getresponse, getresponse form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form
 Requires at least: 4.5
-Tested up to: 4.7.3
+Tested up to: 4.7.4
 Stable tag: trunk
 License: GNU General Public License v2.0 or later
 
@@ -163,6 +163,25 @@ Thank you
 Syed Balkhi
 
 == Changelog ==
+
+= 1.3.7.2 =
+- Fixed: Error for some users with PHP 5.4 and below
+
+= 1.3.7.1 =
+- Fixed: Issue sending form notifications using email fields that had confirmation enabled
+
+= 1.3.7 =
+- Added: Google Invisible reCAPTCHA support
+- Added: Custom field validation messages (see WPForms Settings page)
+- Added: Bulk add choices for Checkbox, Multiple Choice, and Dropdown fields
+- Addded: Filter to allow email notifications to include empty fields, `wpforms_email_display_empty_fields`
+- Added: Field CSS layout selector
+- Changed: Leverage `wp_json_encode` instead of native PHP function
+- Changed: Various WordPress coding standard improvements (work in progress)
+- Changed: Refactored form front-end code to allow for more customizations
+- Changed: Refactored text, textarea, email, number, nand ame fields to allow for more customizations (more coming next release)
+- Fixed: Welcome page typo
+- Fixed: SmartTag selectors getting off sync inside form builder
 
 = 1.3.6.2 =
 - Changed: Improved messaging on Entries page (Lite)

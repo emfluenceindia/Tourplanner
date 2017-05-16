@@ -7,15 +7,24 @@
  * @since      1.0.0
  * @license    GPL-2.0+
  * @copyright  Copyright (c) 2016, WPForms LLC
-*/
+ */
 class WPForms_Settings {
 
 	/**
-	 * Holds the plugin settings
+	 * Holds the plugin settings.
 	 *
 	 * @since 1.0.0
+	 * @var array
 	 */
 	protected $options;
+
+	/**
+	 * The available forms.
+	 *
+	 * @since 1.3.7
+	 * @var array
+	 */
+	public $forms = false;
 
 	/**
 	 * Primary class constructor.
@@ -35,18 +44,20 @@ class WPForms_Settings {
 	 * Get the value of a specific setting.
 	 *
 	 * @since 1.0.0
+	 * @param string $key
+	 * @param bool $default
+	 * @param string $option
 	 * @return mixed
-	*/
+	 */
 	public function get( $key, $default = false, $option = 'wpforms_settings' ) {
 
-		if ( 'wpforms_settings' == $option && !empty( $this->options ) ) {
+		if ( 'wpforms_settings' === $option && ! empty( $this->options ) ) {
 			$options = $this->options;
 		} else {
 			$options = get_option( $option, false );
 		}
 
-		$value = ! empty( $options[ $key ] ) ? $options[ $key ] : $default;
-		return $value;
+		return ! empty( $options[ $key ] ) ? $options[ $key ] : $default;
 	}
 
 	/**
@@ -56,20 +67,26 @@ class WPForms_Settings {
 	 */
 	public function init() {
 
-		// Check what page we are on
+		// Check what page we are on.
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 
-		// Only load if we are actually on the settings page
-		if ( $page == 'wpforms-settings' ) {
+		// Only load if we are actually on the settings page.
+		if ( 'wpforms-settings' === $page ) {
 
-			// Retrieve settings
+			// Retrieve settings.
 			$this->options = get_option( 'wpforms_settings', array() );
 
-			add_action( 'wpforms_tab_settings_general',    array( $this, 'settings_page_tab_general'    ) );
-			add_action( 'wpforms_tab_settings_providers',  array( $this, 'settings_page_tab_providers'  ) );
-			add_action( 'wpforms_tab_settings_system',     array( $this, 'settings_page_tab_system'     ) );
-			add_action( 'admin_enqueue_scripts',           array( $this, 'enqueues'                     ) );
-			add_action( 'wpforms_admin_page',              array( $this, 'output'                       ) );
+			// Retrieve available forms.
+			$args  = array(
+				'orderby' => 'title',
+			);
+			$this->forms = wpforms()->form->get( '', $args );
+
+			add_action( 'wpforms_tab_settings_general',       array( $this, 'settings_page_tab_general'               ) );
+			add_action( 'wpforms_tab_settings_providers',     array( $this, 'settings_page_tab_providers'             ) );
+			add_action( 'wpforms_tab_settings_system',        array( $this, 'settings_page_tab_system'                ) );
+			add_action( 'admin_enqueue_scripts',              array( $this, 'enqueues'                                ) );
+			add_action( 'wpforms_admin_page',                 array( $this, 'output'                                  ) );
 
 			// Hook for add-ons
 			do_action( 'wpforms_settings_init' );
@@ -119,7 +136,7 @@ class WPForms_Settings {
 		wp_enqueue_script(
 			'wpforms-settings',
 			WPFORMS_PLUGIN_URL . 'assets/js/admin-settings.js',
-			array( 'jquery', 'jquery-ui-tabs' ),
+			array( 'jquery' ),
 			WPFORMS_VERSION,
 			false
 		);
@@ -136,7 +153,7 @@ class WPForms_Settings {
 			)
 		);
 
-		// Hook for add-ons
+		// Hook for add-ons.
 		do_action( 'wpforms_settings_enqueue' );
 	}
 
@@ -148,14 +165,14 @@ class WPForms_Settings {
 	 */
 	public function setting_page_tabs() {
 
-		// Define our base tabs
+		// Define our base tabs.
 		$tabs = array(
-			'general'   => __( 'General', 'wpforms' ),
-			'providers' => __( 'Integrations', 'wpforms' ),
-			'system'    => __( 'System Information', 'wpforms' ),
+			'general'       => __( 'General', 'wpforms' ),
+			'providers'     => __( 'Integrations', 'wpforms' ),
+			'system'        => __( 'System Info', 'wpforms' ),
 		);
 
-		// Allow for addons and extensions to add additional tabs
+		// Allow for addons and extensions to add additional tabs.
 		$tabs = apply_filters( 'wpform_settings_tabs', $tabs );
 
 		return $tabs;
@@ -168,38 +185,45 @@ class WPForms_Settings {
 	 */
 	public function settings_page_tab_general() {
 
-		// Check for save, if found let's dance
-		if ( !empty( $_POST['wpforms-settings-general-nonce'] ) ) {
+		// Check for save, if found let's dance.
+		if ( ! empty( $_POST['wpforms-settings-general-nonce'] ) ) {
 
-			// Do we have a valid nonce and permission?
-			if ( ! wp_verify_nonce( $_POST['wpforms-settings-general-nonce'], 'wpforms-settings-general-nonce' ) || !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
+			// Do we have a valid nonce and permission?.
+			if ( ! wp_verify_nonce( $_POST['wpforms-settings-general-nonce'], 'wpforms-settings-general-nonce' ) || ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) ) {
 
-				// No funny business
+				// No funny business.
 				printf( '<div class="error below-h2"><p>%s</p></div>', __( 'Settings check failed.', 'wpforms' ) );
 
 			} else {
 
-				// Save General Settings
+				// Save General Settings.
 				if ( isset( $_POST['submit-general'] ) ) {
 
-					// Prep and sanatize settings for save
-					$this->options['email-template']         = !empty( $_POST['email-template'] ) ? esc_attr( $_POST['email-template'] ) : 'default';
-					$this->options['email-header-image']     = !empty( $_POST['email-header-image'] ) ? esc_url_raw( $_POST['email-header-image'] ) : '';
-					$this->options['email-background-color'] = !empty( $_POST['email-background-color'] ) ? wpforms_sanitize_hex_color( $_POST['email-background-color'] ) : '#e9eaec';
-					$this->options['email-carbon-copy']      = !empty( $_POST['email-carbon-copy'] ) ? '1' : false;
-					$this->options['disable-css']            = !empty( $_POST['disable-css'] ) ? intval( $_POST['disable-css'] ) : '1';
-					$this->options['global-assets']          = !empty( $_POST['global-assets'] ) ? '1' : false;
-					$this->options['recaptcha-site-key']     = !empty( $_POST['recaptcha-site-key'] ) ? esc_html( $_POST['recaptcha-site-key'] ) : '';
-					$this->options['recaptcha-secret-key']   = !empty( $_POST['recaptcha-secret-key'] ) ? esc_html( $_POST['recaptcha-secret-key'] ) : '';
+					// Prep and sanatize settings for save.
+					$this->options['email-template']             = ! empty( $_POST['email-template'] ) ? esc_attr( $_POST['email-template'] ) : 'default';
+					$this->options['email-header-image']         = ! empty( $_POST['email-header-image'] ) ? esc_url_raw( $_POST['email-header-image'] ) : '';
+					$this->options['email-background-color']     = ! empty( $_POST['email-background-color'] ) ? wpforms_sanitize_hex_color( $_POST['email-background-color'] ) : '#e9eaec';
+					$this->options['email-carbon-copy']          = ! empty( $_POST['email-carbon-copy'] ) ? '1' : false;
+					$this->options['disable-css']                = ! empty( $_POST['disable-css'] ) ? intval( $_POST['disable-css'] ) : '1';
+					$this->options['global-assets']              = ! empty( $_POST['global-assets'] ) ? '1' : false;
+					$this->options['recaptcha-type']             = ! empty( $_POST['recaptcha-type'] ) ? esc_html( $_POST['recaptcha-type'] ) : 'v2';
+					$this->options['recaptcha-site-key']         = ! empty( $_POST['recaptcha-site-key'] ) ? esc_html( $_POST['recaptcha-site-key'] ) : '';
+					$this->options['recaptcha-secret-key']       = ! empty( $_POST['recaptcha-secret-key'] ) ? esc_html( $_POST['recaptcha-secret-key'] ) : '';
+					$this->options['validation-required']        = ! empty( $_POST['validation-required'] ) ? sanitize_text_field( $_POST['validation-required'] ) : '';
+					$this->options['validation-url']             = ! empty( $_POST['validation-url'] ) ? sanitize_text_field( $_POST['validation-url'] ) : '';
+					$this->options['validation-email']           = ! empty( $_POST['validation-email'] ) ? sanitize_text_field( $_POST['validation-email'] ) : '';
+					$this->options['validation-confirm']         = ! empty( $_POST['validation-confirm'] ) ? sanitize_text_field( $_POST['validation-confirm'] ) : '';
+
 					$this->options = apply_filters( 'wpforms_settings_save', $this->options, $_POST, 'general' );
 
-					// Update settings in DB
+					// Update settings in DB.
 					update_option( 'wpforms_settings' , $this->options );
 
 					printf( '<div class="updated below-h2"><p>%s</p></div>', __( 'General settings updated.', 'wpforms' ) );
+
 				}
-			}
-		}
+			} // End if().
+		} // End if().
 		?>
 
 		<div id="wpforms-settings-general">
@@ -263,7 +287,7 @@ class WPForms_Settings {
 									}
 									?>
 								</label>
-								<input type="text" name="email-header-image" id="wpforms-settings-email-header-image" class="wpforms-settings-upload-image-value" value="<?php echo esc_url_raw( $this->get( 'email-header-image' ) ); ?>" />
+								<input type="text" name="email-header-image" id="wpforms-settings-general-email-header-image" class="wpforms-settings-upload-image-value" value="<?php echo esc_url_raw( $this->get( 'email-header-image' ) ); ?>" />
 								<a href="#" class="button button-secondary wpforms-settings-upload-image"><?php _e( 'Upload Image', 'wpforms' ); ?></a>
 								<p class="description">
 									<?php _e( 'Upload or choose a logo to be displayed at the top of email notifications.', 'wpforms' ); ?><br>
@@ -293,7 +317,29 @@ class WPForms_Settings {
 							<td class="section" colspan="2">
 								<hr>
 								<h4><?php _e( 'reCAPTCHA', 'wpforms' ); ?></h4>
-								<p><?php _e( 'reCAPTCHA is a free anti-spam service from Google. Its helps protect your website from spam and abuse while letting real people pass through with ease. <a href="http://www.google.com/recaptcha/intro/index.html" target="_blank" rel="noopener">Visit reCAPTCHA</a> to learn more and sign up for a free account or <a href="https://wpforms.com/docs/setup-captcha-wpforms/" target="_blank" rel="noopener">read our walk through</a> for step-by-step directions.', 'wpforms' ); ?></p>
+								<p><?php _e( 'reCAPTCHA is a free anti-spam service from Google which helps to protect your website from spam and abuse while letting real people pass through with ease.', 'wpforms' ); ?></p>
+								<p><?php _e( 'Google\'s original <a href="https://www.google.com/recaptcha/intro/" rel="noopener noreferrer">v2 reCAPTCHA</a> prompts users to check a box to prove they\'re human, whereas <a href="https://www.google.com/recaptcha/intro/invisible.html" rel="noopener noreferrer">Invisible reCAPTCHA</a> uses advanced technology to detect real users without requiring any input.', 'wpforms' ); ?></p>
+								<p><?php _e( 'Sites already using v2 reCAPTCHA will need to create new site keys before switching to the Invisible reCAPTCHA.', 'wpforms' ); ?></p>
+								<p><?php _e( '<a href="https://wpforms.com/docs/setup-captcha-wpforms/" rel="noopener noreferrer">Read our walk through</a> to learn more and for step-by-step directions.', 'wpforms' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-recaptcha-type"><?php _e( 'reCAPTCHA Type', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<select name="recaptcha-type" id="wpforms-settings-general-recaptcha-type">
+									<?php
+									$options = array(
+										'v2'        => 'v2 reCAPTCHA',
+										'invisible' => 'Invisible reCAPTCHA',
+									);
+									$selected = $this->get( 'recaptcha-type' );
+									foreach ( $options as $key => $option ) {
+										printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( $selected, $key, false ), esc_html( $option ) );
+									}
+									?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -310,6 +356,52 @@ class WPForms_Settings {
 							</th>
 							<td>
 								<input type="text" name="recaptcha-secret-key" value="<?php echo esc_attr( $this->get( 'recaptcha-secret-key' ) ); ?>" id="wpforms-settings-general-recaptcha-secret-key">
+							</td>
+						</tr>
+						<tr>
+							<td class="section" colspan="2">
+								<hr>
+								<h4><?php _e( 'Validation Messages', 'wpforms' ); ?></h4>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-validation-required"><?php _e( 'Required', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="validation-required" value="<?php echo esc_attr( $this->get( 'validation-required', __( 'This field is required.', 'wpforms' ) ) ); ?>" id="wpforms-settings-general-validation-required">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-validation-url"><?php _e( 'Website URL', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="validation-url" value="<?php echo esc_attr( $this->get( 'validation-url', __( 'Please enter a valid URL.', 'wpforms' ) ) ); ?>" id="wpforms-settings-general-validation-url">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-validation-email"><?php _e( 'Email', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="validation-email" value="<?php echo esc_attr( $this->get( 'validation-email', __( 'Please enter a valid email address.', 'wpforms' ) ) ); ?>" id="wpforms-settings-general-validation-email">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-validation-number"><?php _e( 'Number', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="validation-number" value="<?php echo esc_attr( $this->get( 'validation-number', __( 'Please enter a valid number.', 'wpforms' ) ) ); ?>" id="wpforms-settings-general-validation-number">
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-validation-confirm"><?php _e( 'Confirm Value', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="validation-confirm" value="<?php echo esc_attr( $this->get( 'validation-confirm', __( 'Field values do not match.', 'wpforms' ) ) ); ?>" id="wpforms-settings-general-validation-confirm">
 							</td>
 						</tr>
 					</tbody>
@@ -333,7 +425,7 @@ class WPForms_Settings {
 		$providers = get_option( 'wpforms_providers', false );
 		$active    = apply_filters( 'wpforms_providers_available', array() );
 
-		// If no provider addons are activated display a message and bail
+		// If no provider addons are activated display a message and bail.
 		if ( empty( $active ) ) {
 			echo '<div class="notice notice-info below-h2"><p>' . sprintf( __( 'You do not have any marketing add-ons activated. You can head over to the <a href="%s">Add-Ons page</a> to install and activate the add-on for your provider.', 'wpforms' ), admin_url( 'admin.php?page=wpforms-addons' ) ) . '</p></div>';
 			return;
@@ -341,9 +433,7 @@ class WPForms_Settings {
 		?>
 
 		<div id="wpforms-settings-providers">
-
 			<?php do_action( 'wpforms_settings_providers', $active, $providers ); ?>
-
 		</div>
 		<?php
 	}
@@ -357,9 +447,7 @@ class WPForms_Settings {
 
 		?>
 		<div id="wpforms-settings-system">
-
 			<textarea readonly="readonly" class="system-info-textarea"><?php echo $this->get_system_info(); ?></textarea>
-
 		</div>
 		<?php
 	}
@@ -422,7 +510,19 @@ class WPForms_Settings {
 	 */
 	public function settings_link( $links ) {
 
-		$setting_link = sprintf( '<a href="%s">%s</a>', add_query_arg( array( 'page' => 'wpforms-settings' ), admin_url( 'admin.php' ) ), __( 'Settings', 'wpforms' ) );
+		$admin_link  = add_query_arg(
+			array(
+				'page' => 'wpforms-settings',
+			),
+			admin_url( 'admin.php' )
+		);
+
+		$setting_link = sprintf(
+			'<a href="%s">%s</a>',
+			$admin_link ,
+			__( 'Settings', 'wpforms' )
+		);
+
 		array_unshift( $links, $setting_link );
 
 		return $links;
@@ -431,7 +531,7 @@ class WPForms_Settings {
 	/**
 	 * Get system information.
 	 *
-	 * Based on a function from Easy Digital Downloads by Pippin Williamson
+	 * Based on a function from Easy Digital Downloads by Pippin Williamson.
 	 *
 	 * @link https://github.com/easydigitaldownloads/easy-digital-downloads/blob/master/includes/admin/tools.php#L470
 	 * @since 1.2.3
@@ -441,20 +541,20 @@ class WPForms_Settings {
 
 		global $wpdb;
 
-		// Get theme info
+		// Get theme info.
 		$theme_data = wp_get_theme();
 		$theme      = $theme_data->Name . ' ' . $theme_data->Version;
 
 		$return  = '### Begin System Info ###' . "\n\n";
 
-		// WPForms info
+		// WPForms info.
 		$activated = get_option( 'wpforms_activated', array() );
 		$return .= '-- WPForms Info' . "\n\n";
-		if ( !empty( $activated['pro'] ) ) {
+		if ( ! empty( $activated['pro'] ) ) {
 			$date    = $activated['pro'] + ( get_option( 'gmt_offset' ) * 3600 );
 			$return .= 'Pro:                      ' . date_i18n( __( 'M j, Y @ g:ia' ), $date ) . "\n";
 		}
-		if ( !empty( $activated['lite'] ) ) {
+		if ( ! empty( $activated['lite'] ) ) {
 			$date    = $activated['lite'] + ( get_option( 'gmt_offset' ) * 3600 );
 			$return .= 'Lite:                     ' . date_i18n( __( 'M j, Y @ g:ia' ), $date ) . "\n";
 		}
@@ -465,129 +565,103 @@ class WPForms_Settings {
 		$return .= 'Home URL:                 ' . home_url() . "\n";
 		$return .= 'Multisite:                ' . ( is_multisite() ? 'Yes' : 'No' ) . "\n";
 
-		// WordPress configuration
+		// WordPress configuration.
 		$return .= "\n" . '-- WordPress Configuration' . "\n\n";
 		$return .= 'Version:                  ' . get_bloginfo( 'version' ) . "\n";
 		$return .= 'Language:                 ' . ( defined( 'WPLANG' ) && WPLANG ? WPLANG : 'en_US' ) . "\n";
 		$return .= 'Permalink Structure:      ' . ( get_option( 'permalink_structure' ) ? get_option( 'permalink_structure' ) : 'Default' ) . "\n";
 		$return .= 'Active Theme:             ' . $theme . "\n";
 		$return .= 'Show On Front:            ' . get_option( 'show_on_front' ) . "\n";
-
-		// Only show page specs if frontpage is set to 'page'
-		if( get_option( 'show_on_front' ) == 'page' ) {
+		// Only show page specs if frontpage is set to 'page'.
+		if ( get_option( 'show_on_front' ) === 'page' ) {
 			$front_page_id = get_option( 'page_on_front' );
 			$blog_page_id = get_option( 'page_for_posts' );
-			$return .= 'Page On Front:            ' . ( $front_page_id != 0 ? get_the_title( $front_page_id ) . ' (#' . $front_page_id . ')' : 'Unset' ) . "\n";
-			$return .= 'Page For Posts:           ' . ( $blog_page_id != 0 ? get_the_title( $blog_page_id ) . ' (#' . $blog_page_id . ')' : 'Unset' ) . "\n";
+			$return .= 'Page On Front:            ' . ( 0 != $front_page_id ? get_the_title( $front_page_id ) . ' (#' . $front_page_id . ')' : 'Unset' ) . "\n";
+			$return .= 'Page For Posts:           ' . ( 0 != $blog_page_id ? get_the_title( $blog_page_id ) . ' (#' . $blog_page_id . ')' : 'Unset' ) . "\n";
 		}
-
 		$return .= 'ABSPATH:                  ' . ABSPATH . "\n";
-
-		// Make sure wp_remote_post() is working
-		/*
-		$request['cmd'] = '_notify-validate';
-		$params = array(
-			'sslverify'     => false,
-			'timeout'       => 60,
-			'user-agent'    => 'WPForms/' . WPFORMS_VERSION,
-			'body'          => $request
-		);
-
-		$response = wp_remote_post( 'https://www.paypal.com/cgi-bin/webscr', $params );
-
-		if( !is_wp_error( $response ) && $response['response']['code'] >= 200 && $response['response']['code'] < 300 ) {
-			$WP_REMOTE_POST = 'wp_remote_post() works';
-		} else {
-			$WP_REMOTE_POST = 'wp_remote_post() does not work';
-		}
-		$return .= 'Remote Post:              ' . $WP_REMOTE_POST . "\n";
-		*/
-
 		$return .= 'Table Prefix:             ' . 'Length: ' . strlen( $wpdb->prefix ) . '   Status: ' . ( strlen( $wpdb->prefix ) > 16 ? 'ERROR: Too long' : 'Acceptable' ) . "\n";
 		$return .= 'WP_DEBUG:                 ' . ( defined( 'WP_DEBUG' ) ? WP_DEBUG ? 'Enabled' : 'Disabled' : 'Not set' ) . "\n";
 		$return .= 'WPFORMS_DEBUG:            ' . ( defined( 'WPFORMS_DEBUG' ) ? WPFORMS_DEBUG ? 'Enabled' : 'Disabled' : 'Not set' ) . "\n";
 		$return .= 'Memory Limit:             ' . WP_MEMORY_LIMIT . "\n";
 		$return .= 'Registered Post Stati:    ' . implode( ', ', get_post_stati() ) . "\n";
 
-		// @todo WPForms configuration/specific details
+		// @todo WPForms configuration/specific details.
 		$return .= "\n" . '-- WordPress Uploads/Constants' . "\n\n";
 		$return .= 'WP_CONTENT_DIR:           ' . ( defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR ? WP_CONTENT_DIR : 'Disabled' : 'Not set' ) . "\n";
 		$return .= 'WP_CONTENT_URL:           ' . ( defined( 'WP_CONTENT_URL' ) ? WP_CONTENT_URL ? WP_CONTENT_URL : 'Disabled' : 'Not set' ) . "\n";
 		$return .= 'UPLOADS:                  ' . ( defined( 'UPLOADS' ) ? UPLOADS ? UPLOADS : 'Disabled' : 'Not set' ) . "\n";
 		$uploads_dir = wp_upload_dir();
-		$return .= 'wp_uploads_dir() path:    ' . $uploads_dir['path']. "\n";
-		$return .= 'wp_uploads_dir() url:     ' . $uploads_dir['url']. "\n";
-		$return .= 'wp_uploads_dir() basedir: ' . $uploads_dir['basedir']. "\n";
-		$return .= 'wp_uploads_dir() baseurl: ' . $uploads_dir['baseurl']. "\n";
+		$return .= 'wp_uploads_dir() path:    ' . $uploads_dir['path'] . "\n";
+		$return .= 'wp_uploads_dir() url:     ' . $uploads_dir['url'] . "\n";
+		$return .= 'wp_uploads_dir() basedir: ' . $uploads_dir['basedir'] . "\n";
+		$return .= 'wp_uploads_dir() baseurl: ' . $uploads_dir['baseurl'] . "\n";
 
-
-		// Get plugins that have an update
+		// Get plugins that have an update.
 		$updates = get_plugin_updates();
 
-		// Must-use plugins
+		// Must-use plugins.
 		// NOTE: MU plugins can't show updates!
 		$muplugins = get_mu_plugins();
-		if( count( $muplugins ) > 0 && !empty( $muplugins ) ) {
+		if ( count( $muplugins ) > 0 && ! empty( $muplugins ) ) {
 			$return .= "\n" . '-- Must-Use Plugins' . "\n\n";
 
-			foreach( $muplugins as $plugin => $plugin_data ) {
+			foreach ( $muplugins as $plugin => $plugin_data ) {
 				$return .= $plugin_data['Name'] . ': ' . $plugin_data['Version'] . "\n";
 			}
 		}
 
-		// WordPress active plugins
+		// WordPress active plugins.
 		$return .= "\n" . '-- WordPress Active Plugins' . "\n\n";
 
 		$plugins = get_plugins();
 		$active_plugins = get_option( 'active_plugins', array() );
 
-		foreach( $plugins as $plugin_path => $plugin ) {
-			if( !in_array( $plugin_path, $active_plugins ) )
+		foreach ( $plugins as $plugin_path => $plugin ) {
+			if ( ! in_array( $plugin_path, $active_plugins, true ) ) {
 				continue;
-
-			$update = ( array_key_exists( $plugin_path, $updates ) ) ? ' (needs update - ' . $updates[$plugin_path]->update->new_version . ')' : '';
+			}
+			$update = ( array_key_exists( $plugin_path, $updates ) ) ? ' (needs update - ' . $updates[ $plugin_path ]->update->new_version . ')' : '';
 			$return .= $plugin['Name'] . ': ' . $plugin['Version'] . $update . "\n";
 		}
 
-		// WordPress inactive plugins
+		// WordPress inactive plugins.
 		$return .= "\n" . '-- WordPress Inactive Plugins' . "\n\n";
 
-		foreach( $plugins as $plugin_path => $plugin ) {
-			if( in_array( $plugin_path, $active_plugins ) )
+		foreach ( $plugins as $plugin_path => $plugin ) {
+			if ( in_array( $plugin_path, $active_plugins ) ) {
 				continue;
-
-			$update = ( array_key_exists( $plugin_path, $updates ) ) ? ' (needs update - ' . $updates[$plugin_path]->update->new_version . ')' : '';
+			}
+			$update = ( array_key_exists( $plugin_path, $updates ) ) ? ' (needs update - ' . $updates[ $plugin_path ]->update->new_version . ')' : '';
 			$return .= $plugin['Name'] . ': ' . $plugin['Version'] . $update . "\n";
 		}
 
-		if( is_multisite() ) {
-			// WordPress Multisite active plugins
+		if ( is_multisite() ) {
+			// WordPress Multisite active plugins.
 			$return .= "\n" . '-- Network Active Plugins' . "\n\n";
 
 			$plugins = wp_get_active_network_plugins();
 			$active_plugins = get_site_option( 'active_sitewide_plugins', array() );
 
-			foreach( $plugins as $plugin_path ) {
+			foreach ( $plugins as $plugin_path ) {
 				$plugin_base = plugin_basename( $plugin_path );
-
-				if( !array_key_exists( $plugin_base, $active_plugins ) )
+				if ( ! array_key_exists( $plugin_base, $active_plugins ) ) {
 					continue;
-
-				$update = ( array_key_exists( $plugin_path, $updates ) ) ? ' (needs update - ' . $updates[$plugin_path]->update->new_version . ')' : '';
+				}
+				$update = ( array_key_exists( $plugin_path, $updates ) ) ? ' (needs update - ' . $updates[ $plugin_path ]->update->new_version . ')' : '';
 				$plugin  = get_plugin_data( $plugin_path );
 				$return .= $plugin['Name'] . ': ' . $plugin['Version'] . $update . "\n";
 			}
 		}
 
-		// Server configuration (really just versioning)
+		// Server configuration (really just versioning).
 		$return .= "\n" . '-- Webserver Configuration' . "\n\n";
 		$return .= 'PHP Version:              ' . PHP_VERSION . "\n";
 		$return .= 'MySQL Version:            ' . $wpdb->db_version() . "\n";
 		$return .= 'Webserver Info:           ' . $_SERVER['SERVER_SOFTWARE'] . "\n";
 
-		// PHP configs... now we're getting to the important stuff
+		// PHP configs... now we're getting to the important stuff.
 		$return .= "\n" . '-- PHP Configuration' . "\n\n";
-		//$return .= 'Safe Mode:                ' . ( ini_get( 'safe_mode' ) ? 'Enabled' : 'Disabled' . "\n" );
 		$return .= 'Memory Limit:             ' . ini_get( 'memory_limit' ) . "\n";
 		$return .= 'Upload Max Size:          ' . ini_get( 'upload_max_filesize' ) . "\n";
 		$return .= 'Post Max Size:            ' . ini_get( 'post_max_size' ) . "\n";
@@ -596,7 +670,7 @@ class WPForms_Settings {
 		$return .= 'Max Input Vars:           ' . ini_get( 'max_input_vars' ) . "\n";
 		$return .= 'Display Errors:           ' . ( ini_get( 'display_errors' ) ? 'On (' . ini_get( 'display_errors' ) . ')' : 'N/A' ) . "\n";
 
-		// PHP extensions and such
+		// PHP extensions and such.
 		$return .= "\n" . '-- PHP Extensions' . "\n\n";
 		$return .= 'cURL:                     ' . ( function_exists( 'curl_init' ) ? 'Supported' : 'Not Supported' ) . "\n";
 		$return .= 'fsockopen:                ' . ( function_exists( 'fsockopen' ) ? 'Supported' : 'Not Supported' ) . "\n";
@@ -607,8 +681,8 @@ class WPForms_Settings {
 		$return .= "\n" . '-- Session Configuration' . "\n\n";
 		$return .= 'Session:                  ' . ( isset( $_SESSION ) ? 'Enabled' : 'Disabled' ) . "\n";
 
-		// The rest of this is only relevant is session is enabled
-		if( isset( $_SESSION ) ) {
+		// The rest of this is only relevant is session is enabled.
+		if ( isset( $_SESSION ) ) {
 			$return .= 'Session Name:             ' . esc_html( ini_get( 'session.name' ) ) . "\n";
 			$return .= 'Cookie Path:              ' . esc_html( ini_get( 'session.cookie_path' ) ) . "\n";
 			$return .= 'Save Path:                ' . esc_html( ini_get( 'session.save_path' ) ) . "\n";

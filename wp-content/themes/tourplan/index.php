@@ -16,7 +16,7 @@
                 $new_term_id = $new_term['term_id'];
 
                 //Dynamic hook used: create_{$taxonomy}
-                do_action('create_amenities', $new_term_id);
+                //do_action('create_amenities', $new_term_id);
 
                 wp_delete_term($new_term_id, 'amenities');
 
@@ -54,10 +54,15 @@
                             <div class="col-md-12 text-center">
                                 <!-- Pagination block goes here -->
                                 <?php
-                                    echo paginate_links(array(
+                                    /*echo paginate_links(array(
                                         'total' => $query->max_num_pages,
                                         'format' => 'page/%#%',
-                                        'add_args' => array( 'place' => 1, 'type' => 4 /* or whatever the project number is*/ ),
+                                        'add_args' => array( 'place' => 1, 'type' => 4 ), // or whatever the project number is
+                                    ));*/
+
+                                    echo paginate_links(array(
+                                        'total' => $query->max_num_pages,
+                                        'format' => 'page/%#%'
                                     ));
                                 /*echo paginate_links(
                                     array(
@@ -80,7 +85,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-
+    Put your adsense code here
 </div>
 
 <?php get_footer(); ?>

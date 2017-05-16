@@ -118,7 +118,7 @@ class WPForms_Welcome {
 			<div class="feature-section two-col">
 				<div class="col">
 					<h3><?php _e( 'Creating Your First Form' , 'wpforms' ); ?></h3>
-					<p><?php printf( __( 'WPForms make it easy to create forms in WordPress. You can follow the video tutorial on the right or read our how to <a href="%s" target="_blank" rel="noopener">create your first form guide</a>.', 'wpforms' ), ' https://wpforms.com/docs/creating-first-form/ ' ); ?>
+					<p><?php printf( __( 'WPForms makes it easy to create forms in WordPress. You can follow the video tutorial on the right or read our how to <a href="%s" target="_blank" rel="noopener">create your first form guide</a>.', 'wpforms' ), ' https://wpforms.com/docs/creating-first-form/ ' ); ?>
 					<p><?php printf( __( 'But in reality, the process is so intuitive that you can just start by going to <a href="%s">WPForms - > Add New</a>.', 'wpforms' ), admin_url( 'admin.php?page=wpforms-builder' ) ); ?>
 				</div>
 				<div class="col">
