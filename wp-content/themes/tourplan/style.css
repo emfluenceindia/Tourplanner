@@ -595,3 +595,12 @@ ul.hotel-features li {
 a {
    cursor: pointer;
 }
+
+.breadcrumbs {
+    font-size: .85em;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    line-height: 2.5em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

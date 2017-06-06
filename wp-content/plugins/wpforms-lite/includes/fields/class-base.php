@@ -445,7 +445,7 @@ abstract class WPForms_Field {
 				);
 
 				// Field option choices inputs
-				$option_choices = sprintf( '<ul data-next-id="%s" data-field-id="%d" data-field-type="%s">', max( array_keys( $values ) ) +1, $field['id'], $this->type );
+				$option_choices = sprintf( '<ul class="choices-list" data-next-id="%s" data-field-id="%d" data-field-type="%s">', max( array_keys( $values ) ) +1, $field['id'], $this->type );
 					foreach ( $values as $key => $value ) {
 						$default     = ! empty( $value['default'] ) ? $value['default'] : '';
 						$placeholder = wpforms_format_amount( 0 );
@@ -842,8 +842,9 @@ abstract class WPForms_Field {
 		}
 
 		printf(
-			'<label for="%s" class="wpforms-field-sublabel %s">%s</label>',
+			'<label for="%s" class="wpforms-field-sublabel %s %s">%s</label>',
 			esc_attr( $field['properties']['inputs'][ $key ]['id'] ),
+			sanitize_html_class( $pos ),
 			$hidden,
 			$field['properties']['inputs'][ $key ]['sublabel']['value']
 		);

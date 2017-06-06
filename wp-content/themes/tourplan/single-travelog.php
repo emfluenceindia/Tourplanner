@@ -11,6 +11,13 @@
     </div>
     <div class="col-md-7">
         <?php while(have_posts()) : the_post(); ?>
+            <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+                <?php if(function_exists('bcn_display'))
+                {
+                    bcn_display();
+                }?>
+            </div>
+            <div class="margin-top-20"></div>
             <h1 class="entry-title module-head roboto-c bold"><?php echo the_title(); ?></h1>
             <?php
                 //$post = NULL;

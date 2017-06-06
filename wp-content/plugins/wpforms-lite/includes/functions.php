@@ -346,13 +346,11 @@ function wpforms_html_attributes( $id = '', $class = array(), $datas = array(), 
  */
 function wpforms_sanitize_classes( $classes, $convert = false ) {
 
-	$array = false;
+	$array = is_array( $classes );
 	$css   = array();
 
 	if ( ! empty( $classes ) ) {
-		if ( is_array( $classes ) ) {
-			$array = true;
-		} else {
+		if ( ! $array ) {
 			$classes = explode( ' ', trim( $classes ) );
 		}
 		foreach ( $classes as $class ) {

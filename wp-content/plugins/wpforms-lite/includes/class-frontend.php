@@ -111,7 +111,7 @@ class WPForms_Frontend {
 				);
 				$form_data = wpforms()->form->get( $success, $args );
 			}
-		} elseif ( ! empty( $_POST['wpforms']['id'] ) && $form_id === absint( $_POST['wpforms']['id'] ) && empty( $errors ) ) {
+		} elseif ( ! empty( $_POST['wpforms']['id'] ) && absint( $_POST['wpforms']['id'] ) === $form_id && empty( $errors ) ) {
 			// Completed form check.
 			$success = true;
 		}
@@ -408,9 +408,11 @@ class WPForms_Frontend {
 	function get_field_properties( $field, $form_data, $attributes = array() ) {
 
 		// This filter is for backwards compatibility purposes.
-		$types = array( 'text', 'textarea', 'number', 'email', 'hidden', 'url', 'html', 'divider' );
+		$types = array( 'text', 'textarea', 'number', 'email', 'hidden', 'url', 'html', 'divider', 'password', 'phone' );
 		if ( in_array( $field['type'], $types, true ) ) {
 			$field = apply_filters( "wpforms_{$field['type']}_field_display", $field, $attributes, $form_data );
+		} elseif ( 'credit-card' === $field['type'] ) {
+			$field = apply_filters( 'wpforms_creditcard_field_display', $field, $attributes, $form_data );
 		}
 
 		$form_id    = absint( $form_data['id'] );
@@ -651,7 +653,7 @@ class WPForms_Frontend {
 		);
 		$data    = apply_filters( 'wpforms_frontend_recaptcha', $data, $form_data );
 
-		if ( 'invisible' === $type ){
+		if ( 'invisible' === $type ) {
 			$data['size'] = 'invisible';
 		}
 
@@ -876,7 +878,6 @@ class WPForms_Frontend {
 		);
 
 		// Load reCAPTCHA support if form supports it.
-
 		$site_key   = wpforms_setting( 'recaptcha-site-key' );
 		$secret_key = wpforms_setting( 'recaptcha-secret-key' );
 		$type       = wpforms_setting( 'recaptcha-type', 'v2' );
@@ -898,38 +899,6 @@ class WPForms_Frontend {
 			}
 			wp_add_inline_script( 'wpforms-recaptcha', $recaptch_inline );
 		}
-
-		// Define base strings.
-		$strings = array(
-			'val_required'        => wpforms_setting( 'validation-required', __( 'This field is required.', 'wpforms' ) ),
-			'val_url'             => wpforms_setting( 'validation-url', __( 'Please enter a valid URL.', 'wpforms' ) ),
-			'val_email'           => wpforms_setting( 'validation-email', __( 'Please enter a valid email address.', 'wpforms' ) ),
-			'val_number'          => wpforms_setting( 'validation-number', __( 'Please enter a valid number.', 'wpforms' ) ),
-			'val_confirm'         => wpforms_setting( 'validation-confirm', __( 'Field values do not match.', 'wpforms' ) ),
-			'val_fileextension'   => wpforms_setting( 'validation-fileextension', __( 'File type is not allowed.', 'wpforms' ) ),
-			'val_filesize'        => wpforms_setting( 'validation-filesize', __( 'File exceeds max size allowed.', 'wpforms' ) ),
-			'val_time12h'         => wpforms_setting( 'validation-time12h', __( 'Please enter time in 12-hour AM/PM format (eg 8:45 AM).', 'wpforms' ) ),
-			'val_time24h'         => wpforms_setting( 'validation-time24h', __( 'Please enter time in 24-hour format (eg 22:45).', 'wpforms' ) ),
-			'val_requiredpayment' => wpforms_setting( 'validation-requiredpayment', __( 'Payment is required.', 'wpforms' ) ),
-			'val_creditcard'      => wpforms_setting( 'validation-creditcard', __( 'Please enter a valid credit card number.', 'wpforms' ) ),
-		);
-		// Include payment related strings if needed.
-		if ( function_exists( 'wpforms_get_currencies' ) ) {
-			$currency   = wpforms_setting( 'currency', 'USD' );
-			$currencies = wpforms_get_currencies();
-			$strings['currency_code']       = $currency;
-			$strings['currency_thousands']  = $currencies[ $currency ]['thousands_separator'];
-			$strings['currency_decimal']    = $currencies[ $currency ]['decimal_separator'];
-			$strings['currency_symbol']     = $currencies[ $currency ]['symbol'];
-			$strings['currency_symbol_pos'] = $currencies[ $currency ]['symbol_pos'];
-		}
-		$strings = apply_filters( 'wpforms_frontend_strings', $strings );
-		// Load the necessary strings.
-		wp_localize_script(
-			'wpforms',
-			'wpforms_settings',
-			$strings
-		);
 	}
 
 	/**
@@ -988,6 +957,49 @@ class WPForms_Frontend {
 		if ( empty( $this->forms ) && ! $this->assets_global() ) {
 			return;
 		}
+
+		// Below we do our own implentation of wp_localize_script in an effort
+		// to be better compatible with caching plugins which were causing
+		// conflicts.
+
+		// Define base strings.
+		$strings = array(
+			'val_required'        => wpforms_setting( 'validation-required', __( 'This field is required.', 'wpforms' ) ),
+			'val_url'             => wpforms_setting( 'validation-url', __( 'Please enter a valid URL.', 'wpforms' ) ),
+			'val_email'           => wpforms_setting( 'validation-email', __( 'Please enter a valid email address.', 'wpforms' ) ),
+			'val_number'          => wpforms_setting( 'validation-number', __( 'Please enter a valid number.', 'wpforms' ) ),
+			'val_confirm'         => wpforms_setting( 'validation-confirm', __( 'Field values do not match.', 'wpforms' ) ),
+			'val_fileextension'   => wpforms_setting( 'validation-fileextension', __( 'File type is not allowed.', 'wpforms' ) ),
+			'val_filesize'        => wpforms_setting( 'validation-filesize', __( 'File exceeds max size allowed.', 'wpforms' ) ),
+			'val_time12h'         => wpforms_setting( 'validation-time12h', __( 'Please enter time in 12-hour AM/PM format (eg 8:45 AM).', 'wpforms' ) ),
+			'val_time24h'         => wpforms_setting( 'validation-time24h', __( 'Please enter time in 24-hour format (eg 22:45).', 'wpforms' ) ),
+			'val_requiredpayment' => wpforms_setting( 'validation-requiredpayment', __( 'Payment is required.', 'wpforms' ) ),
+			'val_creditcard'      => wpforms_setting( 'validation-creditcard', __( 'Please enter a valid credit card number.', 'wpforms' ) ),
+		);
+		// Include payment related strings if needed.
+		if ( function_exists( 'wpforms_get_currencies' ) ) {
+			$currency   = wpforms_setting( 'currency', 'USD' );
+			$currencies = wpforms_get_currencies();
+			$strings['currency_code']       = $currency;
+			$strings['currency_thousands']  = $currencies[ $currency ]['thousands_separator'];
+			$strings['currency_decimal']    = $currencies[ $currency ]['decimal_separator'];
+			$strings['currency_symbol']     = $currencies[ $currency ]['symbol'];
+			$strings['currency_symbol_pos'] = $currencies[ $currency ]['symbol_pos'];
+		}
+		$strings = apply_filters( 'wpforms_frontend_strings', $strings );
+
+		foreach ( (array) $strings as $key => $value ) {
+			if ( ! is_scalar( $value ) ) {
+				continue;
+			}
+			$strings[ $key ] = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8');
+		}
+
+		echo "<script type='text/javascript'>\n";
+		echo "/* <![CDATA[ */\n";
+		echo 'var wpforms_settings = ' . wp_json_encode( $strings ) . "\n";
+		echo "/* ]]> */\n";
+		echo "</script>\n";
 
 		do_action( 'wpforms_wp_footer_end', $this->forms );
 	}

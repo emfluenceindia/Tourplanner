@@ -647,13 +647,11 @@ function wp_redirect_admin_locations() {
 
 	$logins = array(
 		home_url( 'wp-login.php', 'relative' ),
-		home_url( 'login.php', 'relative' ),
 		home_url( 'login', 'relative' ),
 		site_url( 'login', 'relative' ),
 	);
-
 	if ( in_array( untrailingslashit( $_SERVER['REQUEST_URI'] ), $logins ) ) {
-		wp_redirect(wp_login_url());
+		wp_redirect( wp_login_url() );
 		exit;
 	}
 }

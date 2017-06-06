@@ -81,7 +81,6 @@ class WPForms_Field_Name extends WPForms_Field {
 						'hidden'   => ! empty( $field['sublabel_hide'] ),
 						'value'    => __( 'First', 'wpforms' ),
 					),
-					'value'    => '',
 				),
 				'middle'       => array(
 					'attr'     => array(
@@ -102,7 +101,6 @@ class WPForms_Field_Name extends WPForms_Field {
 						'hidden'   => ! empty( $field['sublabel_hide'] ),
 						'value'    => __( 'Middle', 'wpforms' ),
 					),
-					'value'    => '',
 				),
 				'last'         => array(
 					'attr'     => array(
@@ -124,7 +122,6 @@ class WPForms_Field_Name extends WPForms_Field {
 						'hidden'   => ! empty( $field['sublabel_hide'] ),
 						'value'    => __( 'Last', 'wpforms' ),
 					),
-					'value'    => '',
 				),
 			),
 		);
@@ -401,9 +398,10 @@ class WPForms_Field_Name extends WPForms_Field {
 	 *
 	 * @since 1.0.0
 	 * @param array $field
+	 * @param array $deprecated
 	 * @param array $form_data
 	 */
-	public function field_display( $field, $field_atts, $form_data ) {
+	public function field_display( $field, $deprecated, $form_data ) {
 
 		// Define data.
 		$form_id = absint( $form_data['id'] );

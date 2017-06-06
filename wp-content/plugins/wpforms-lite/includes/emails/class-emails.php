@@ -390,7 +390,7 @@ class WPForms_WP_Emails {
 	}
 
 	/**
-	 * Process the all fields smart tag if pressent.
+	 * Process the all fields smart tag if present.
 	 *
 	 * @since 1.1.3
 	 */

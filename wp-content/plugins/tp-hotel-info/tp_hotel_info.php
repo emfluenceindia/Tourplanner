@@ -30,13 +30,16 @@ function register_hotel_info() {
     $args = array(
         'labels' => $labels,
         'public' => true,
+        'publicly_queryable' => true,
+        'query_var' => true,
+        'has_archive' => true,
         'capability_type' => 'post',
         'taxonomies' => array ('hotel_type', 'room_type', 'amenities'),
         'show_ui' => true,
         'show_in_menu' => true,
         'menu_position' => 28,
         'hierarchical' => false,
-        'rewrite' => array('slug', 'hotels'),
+        'rewrite' => array('slug' => 'hotel'),
         'supports' => $supports,
         'exclude_from_search' => false
     );
@@ -166,7 +169,7 @@ function create_hotel_metabox_layout($post, $metabox_title, $is_text_area, $id_n
                         style="width:100%" maxlength="<?php echo $maxlength; ?>"
                         placeholder="<?php echo $placeholder_text; ?>"
                         <?php if($is_required){ ?>required<?php } ?>>
-                  <?php echo esc_attr(trim(br2nl($input_value))); ?>
+                  <?php echo esc_attr(ltrim( rtrim( br2nl($input_value)) ) ); ?>
               </textarea>
         <?php
         } else {

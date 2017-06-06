@@ -975,7 +975,9 @@
 
 							if ( type === 'checkbox' || type === 'radio' ) {
 								if ($this.is(':checked')){
-									$newFieldOptions.find('[name="'+newName+'"]').prop('checked', true);
+									$newFieldOptions.find('[name="'+newName+'"]').prop('checked', true).attr('checked','checked');
+								} else {
+									$newFieldOptions.find('[name="'+newName+'"]').prop('checked', false).attr('checked',false);
 								}
 							} else if ($this.is('select')) {
 								if ($this.find('option:selected').length) {
@@ -1768,7 +1770,7 @@
 					'layout-4' : [
 						{
 							'class': 'one-third',
-							'data' : 'wpforms-one-third wpforms-first'
+							'data' : 'wpforms-one-thirds wpforms-first'
 						},
 						{
 							'class': 'two-third',
@@ -1778,7 +1780,7 @@
 					'layout-5' : [
 						{
 							'class': 'two-third',
-							'data' : 'wpforms-two-third wpforms-first'
+							'data' : 'wpforms-two-thirds wpforms-first'
 						},
 						{
 							'class': 'one-third',

@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - SiteOrigin Widgets Bundle - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-04-23 15:07:06+0000\n"
+"PO-Revision-Date: 2017-05-17 15:26:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,54 @@ msgstr ""
 "X-Generator: GlotPress/2.4.0-alpha\n"
 "Language: es\n"
 "Project-Id-Version: Plugins - SiteOrigin Widgets Bundle - Stable (latest release)\n"
+
+#: widgets/post-carousel/post-carousel.php:96
+msgid "Featured Image size"
+msgstr "Tamaño de imagen destacada"
+
+#: widgets/google-map/google-map.php:418
+msgid "Enter your %sAPI key%s. Your map won't function correctly without one."
+msgstr "Introduce tu %sclave API%s. Tu mapa no funcionará correctamente si no tienes una."
+
+#: widgets/features/features.php:127
+msgid "Font Design"
+msgstr "Diseño de fuentes"
+
+#: widgets/features/features.php:65
+msgid "Bottom"
+msgstr "Al fondo"
+
+#: widgets/features/features.php:63
+msgid "Top"
+msgstr "Arriba"
+
+#: widgets/features/features.php:61
+msgid "Container Position"
+msgstr "Posición del contenedor"
+
+#: widgets/contact/contact.php:413
+msgid " Border style"
+msgstr "Estilo del borde"
+
+#: widgets/contact/contact.php:102
+msgid "Fields marked with * are required"
+msgstr "Los campos marcados con * son obligatorios"
+
+#: widgets/contact/contact.php:101
+msgid "Required field indicator message"
+msgstr "Indicador del mensaje de campo obligatorio"
+
+#: widgets/contact/contact.php:90
+msgid "Indicate required fields with asterisk (*)"
+msgstr "Indica los campos obligatorios con asterisco (*)"
+
+#: widgets/button/button.php:209
+msgid "Adds a rel attribute to the button link."
+msgstr "Añade un atributo rel al enlace del botón."
+
+#: widgets/button/button.php:208
+msgid "Rel attribute"
+msgstr "Atributo rel"
 
 #: widgets/testimonial/testimonial.php:242
 msgid "Testimonial Radius"

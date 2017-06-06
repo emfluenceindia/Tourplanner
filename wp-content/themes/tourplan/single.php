@@ -24,8 +24,14 @@
                         global $wp;
                         $request_url=$_SERVER['REQUEST_URI'];
                         $current_url = home_url(add_query_arg(array(),$wp->request));
-                        echo $request_url;
+                        //echo $request_url;
                     ?>
+                    <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+                        <?php if(function_exists('bcn_display'))
+                        {
+                            bcn_display();
+                        }?>
+                    </div>
                     <?php if(function_exists('the_ratings')) { the_ratings(); } ?>
                 </div>
                 <div class="clearfix"></div>
@@ -66,4 +72,5 @@
         <div class="clearfix"></div>
     </div>
 </div>
+<?php wp_link_pages(); ?>
 <?php get_footer(); ?>

@@ -82,8 +82,7 @@ class WPForms_Field_Email extends WPForms_Field {
 						'wpforms-field-email-secondary'
 					),
 					'data'     => array(
-						'rule-confirm-msg' => __( 'Email does not match.', 'wpforms' ),
-						'rule-confirm'     => '#' . $properties['inputs']['primary']['id'],
+						'rule-confirm' => '#' . $properties['inputs']['primary']['id'],
 					),
 					'id'       => "wpforms-{$form_id}-field_{$field_id}-secondary",
 					'required' => ! empty( $field['required'] ) ? 'required' : '',

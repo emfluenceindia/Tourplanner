@@ -9,6 +9,9 @@
     require_once(ABSPATH . "wp-admin" . '/includes/file.php');
     require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
+    //Edit button
+    require('live-chat-editor-button/live-chat-editor-button.php');
+
     function get_category_object($cat_name){
         //Reference: https://codex.wordpress.org/Function_Reference/get_category
         $term = get_term_by('name', $cat_name, 'category');
@@ -44,6 +47,9 @@
         wp_enqueue_style('bootstrap.min', get_stylesheet_directory_uri().'/styles/bootstrap/css/bootstrap.min.css', array(), mt_rand(), 'all');
         wp_enqueue_style('bootstrap.icon-large.min', get_stylesheet_directory_uri().'/styles/bootstrap/css/bootstrap.icon-large.min.css', array(), mt_rand(), 'all');
         wp_enqueue_style('bootstrap-theme.min', get_stylesheet_directory_uri().'/styles/bootstrap/css/bootstrap-theme.min.css', array(), mt_rand(), 'all');
+
+        /* Dashicons */
+        //wp_enqueue_style('livechat-button', get_stylesheet_directory_uri().'/live-chat-editor-button/live-chat-editor-button.css', array(), mt_rand(), 'all');
 
         /* JS references */
         wp_enqueue_script('equal-height', get_template_directory_uri() . '/scripts/equal-height.js', array('jquery'), 1.1, true);
@@ -1193,4 +1199,44 @@
         //echo "Newly added term id is: " . $term_id;
     }
 
+    add_action( 'init', 'wptuts_buttons' );
+    function wptuts_buttons() {
+        add_filter( "mce_external_plugins", "wptuts_add_buttons" );
+        add_filter( 'mce_buttons', 'wptuts_register_buttons' );
+    }
+    function wptuts_add_buttons( $plugin_array ) {
+        $plugin_array['wptuts'] = get_template_directory_uri() . '/live-chat-editor-button/live-chat-editor-button-plugin.js';
+        return $plugin_array;
+    }
+    function wptuts_register_buttons( $buttons ) {
+        array_push( $buttons, 'dropcap' ); // dropcap', 'recentposts
+        return $buttons;
+    }
+
+    add_filter('bcn_add_post_type_arg', 'my_add_post_type_arg_filt', 10, 3);
+    function my_add_post_type_arg_filt($add_query_arg, $type, $taxonomy)
+    {
+        return false;
+    }
+
+    /* Add custom dashboard widget */
+    add_action('wp_dashboard_setup', 'tp_post_counts_reference');
+
+    function tp_post_counts_reference() {
+        global $wp_meta_boxes;
+        wp_add_dashboard_widget('custom_help_widget', 'Posts in all post types', 'custom_dashboard_help');
+    }
+
+    function custom_dashboard_help() {
+        $types = get_post_types();
+        foreach( $types as $type )
+        {
+            if($type != 'travelog' && $type != 'package_tour' && $type != 'hotel-info') continue;
+            $typeobj = get_post_type_object( $type );
+
+            if($typeobj->has_archive) {
+                echo '<a href="' . get_post_type_archive_link($type) . '">' . $typeobj->labels->name . '</a>: ' . wp_count_posts($type)->publish . '<br />';
+            }
+        }
+    }
 ?>

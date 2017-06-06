@@ -13,6 +13,12 @@
             <?php
                 if(have_posts()){
                     while (have_posts()) : the_post(); $post_id = get_the_ID(); ?>
+                        <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+                            <?php if(function_exists('bcn_display'))
+                            {
+                                bcn_display();
+                            }?>
+                        </div>
                         <h1 class="entry-title module-head roboto-c bold"><?php echo the_title(); ?></h1>
                         <div class="text-small margin-top-5"><i class="fa fa-map-marker text-blue"></i>&nbsp;<?php echo wp_strip_all_tags(get_post_meta(get_the_ID(), '_hotel_address', true), true); ?><br />
                             <i class="fa fa-phone-square text-blue"></i>&nbsp;<?php echo get_post_meta($post_id, '_hotel_primary_phone', true); ?>

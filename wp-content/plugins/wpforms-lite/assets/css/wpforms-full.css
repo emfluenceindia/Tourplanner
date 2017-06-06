@@ -163,6 +163,10 @@ div.wpforms-container-full .wpforms-form .wpforms-field-sublabel {
 	padding: 0;
 }
 
+div.wpforms-container-full .wpforms-form .wpforms-field-sublabel.before {
+	margin: 0 0 4px 0;
+}
+
 div.wpforms-container-full .wpforms-form .wpforms-field-label-inline {
 	display: inline;
 	vertical-align: baseline;
